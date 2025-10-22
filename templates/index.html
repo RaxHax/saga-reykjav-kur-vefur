@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K2 Control Surface</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg-primary: radial-gradient(circle at top right, #2f3050, #0b0e16 58%);
+            --bg-noise: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23333b5c" fill-opacity="0.35"%3E%3Cpath d="M14 16h2v2h-2zM114 96h2v2h-2zM44 126h2v2h-2zM84 36h2v2h-2zM134 66h2v2h-2zM54 46h2v2h-2zM104 136h2v2h-2zM24 86h2v2h-2z"/%3E%3C/g%3E%3C/svg%3E');
+            --card-bg: rgba(15, 18, 32, 0.72);
+            --card-border: rgba(155, 172, 255, 0.16);
+            --card-hover: rgba(78, 91, 196, 0.25);
+            --brand-color: #7d8bff;
+            --text-strong: #f6f7ff;
+            --text-muted: rgba(246, 247, 255, 0.68);
+            --highlight: #ffb457;
+            --triangle-shadow: 0 20px 55px rgba(12, 12, 30, 0.55);
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-strong);
+            position: relative;
+            overflow-x: hidden;
+        }
+        body::after {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: var(--bg-noise);
+            opacity: 0.18;
+            pointer-events: none;
+        }
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: clamp(24px, 5vw, 48px) clamp(24px, 7vw, 80px) 0;
+            position: relative;
+            z-index: 1;
+        }
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .brand img {
+            width: clamp(54px, 9vw, 82px);
+            height: clamp(54px, 9vw, 82px);
+            object-fit: contain;
+            filter: drop-shadow(0 12px 24px rgba(125, 139, 255, 0.35));
+        }
+        .brand span {
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            font-size: clamp(0.95rem, 2vw, 1.2rem);
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+        .brand strong {
+            display: block;
+            font-size: clamp(1.4rem, 3.2vw, 2.1rem);
+            letter-spacing: -0.02em;
+            color: var(--text-strong);
+        }
+        main {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: clamp(18px, 3vw, 36px);
+            padding: clamp(32px, 7vw, 96px) clamp(24px, 8vw, 120px) clamp(80px, 14vh, 140px);
+            position: relative;
+            z-index: 1;
+        }
+        .triangle-card {
+            position: relative;
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            padding: clamp(56px, 12vw, 84px) clamp(16px, 4vw, 32px) clamp(36px, 6vw, 48px);
+            min-height: clamp(240px, 38vw, 320px);
+            backdrop-filter: blur(18px);
+            box-shadow: var(--triangle-shadow);
+            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+        }
+        .triangle-card.small {
+            min-height: clamp(190px, 32vw, 240px);
+            padding-top: clamp(42px, 9vw, 60px);
+        }
+        .triangle-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(125, 139, 255, 0.45);
+            background: linear-gradient(160deg, rgba(125, 139, 255, 0.2), rgba(33, 36, 64, 0.9));
+            box-shadow: 0 32px 60px rgba(34, 44, 144, 0.35);
+        }
+        .triangle-card:hover .card-label {
+            color: var(--highlight);
+        }
+        .card-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            height: 100%;
+            text-align: center;
+            gap: clamp(12px, 2.5vw, 18px);
+        }
+        .card-icon {
+            width: clamp(78px, 15vw, 108px);
+            height: clamp(78px, 15vw, 108px);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.04);
+            display: grid;
+            place-items: center;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: clamp(12px, 3vw, 16px);
+        }
+        .card-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        .card-label {
+            font-size: clamp(1.1rem, 2.8vw, 1.8rem);
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+        .card-description {
+            color: var(--text-muted);
+            font-size: clamp(0.92rem, 2vw, 1.05rem);
+            line-height: 1.6;
+            max-width: 220px;
+            margin: 0 auto;
+        }
+        .settings-panel {
+            grid-column: 1 / -1;
+            margin-top: clamp(10px, 4vw, 26px);
+            padding: clamp(24px, 4vw, 36px);
+            background: rgba(9, 12, 24, 0.78);
+            border: 1px solid rgba(111, 125, 220, 0.22);
+            border-radius: 28px;
+            backdrop-filter: blur(16px);
+            box-shadow: 0 28px 70px rgba(8, 8, 24, 0.58);
+            display: none;
+        }
+        .settings-panel.active { display: block; }
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 18px;
+            margin-bottom: clamp(18px, 3vw, 26px);
+        }
+        .settings-header h2 {
+            margin: 0;
+            font-size: clamp(1.4rem, 2.6vw, 1.8rem);
+        }
+        .settings-header button {
+            border: none;
+            border-radius: 999px;
+            padding: 10px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            background: rgba(255, 180, 87, 0.14);
+            color: var(--highlight);
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .settings-header button:hover {
+            background: rgba(255, 180, 87, 0.24);
+        }
+        .settings-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: clamp(18px, 3vw, 28px);
+        }
+        .settings-card {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 22px;
+            padding: clamp(18px, 3vw, 24px);
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .settings-card h3 {
+            margin: 0;
+            font-size: 1.05rem;
+            font-weight: 600;
+            letter-spacing: 0.01em;
+        }
+        .settings-card ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: grid;
+            gap: 8px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.55;
+        }
+        .settings-card code {
+            background: rgba(125, 139, 255, 0.18);
+            padding: 2px 6px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            color: var(--text-strong);
+        }
+        footer {
+            position: relative;
+            z-index: 1;
+            padding: 24px clamp(24px, 8vw, 120px) 48px;
+            color: rgba(246, 247, 255, 0.45);
+            font-size: 0.88rem;
+        }
+        @media (max-width: 820px) {
+            main {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+            .triangle-card {
+                min-height: clamp(200px, 50vw, 260px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="brand">
+            <img src="{{ url_for('static', filename='branding/logos/placeholder-logo.svg') }}" alt="K2 placeholder logo">
+            <div>
+                <span>Design system preview</span>
+                <strong>K2 Control Surface</strong>
+            </div>
+        </div>
+        <div class="brand" aria-hidden="true">
+            <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="">
+            <div>
+                <span>Brand assets</span>
+                <strong>Editable Soon</strong>
+            </div>
+        </div>
+    </header>
+    <main>
+        <a class="triangle-card" href="{{ url_for('k2_projects') }}">
+            <div class="card-inner">
+                <div class="card-icon">
+                    <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="Placeholder icon for K2 projects">
+                </div>
+                <div class="card-label">K2 Projects</div>
+                <p class="card-description">Curated project suites. Placeholder canvas waiting for detailed module specs.</p>
+            </div>
+        </a>
+        <a class="triangle-card" href="{{ url_for('k2_search') }}">
+            <div class="card-inner">
+                <div class="card-icon">
+                    <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="Placeholder icon for K2 search">
+                </div>
+                <div class="card-label">K2 Search Engines</div>
+                <p class="card-description">Entry point for semantic image search. Legacy experience still available during rebuild.</p>
+            </div>
+        </a>
+        <a class="triangle-card small" href="#settings" id="settings-trigger">
+            <div class="card-inner">
+                <div class="card-icon">
+                    <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="Placeholder icon for settings">
+                </div>
+                <div class="card-label">Settings</div>
+                <p class="card-description">Adjust folders, theming and ingest defaults.</p>
+            </div>
+        </a>
+        <section class="settings-panel" id="settings-panel">
+            <div class="settings-header">
+                <h2>Workspace Settings Preview</h2>
+                <button type="button" id="settings-close">Hide panel</button>
+            </div>
+            <div class="settings-grid">
+                <article class="settings-card">
+                    <h3>Brand Assets</h3>
+                    <ul>
+                        <li>Icon source directory: <code>static/branding/icons/</code></li>
+                        <li>Logo source directory: <code>static/branding/logos/</code></li>
+                        <li>Image library bucket: <code>static/branding/images/</code></li>
+                    </ul>
+                </article>
+                <article class="settings-card">
+                    <h3>Colour &amp; Theme</h3>
+                    <ul>
+                        <li>Theme profile: <code>themes/aurora.json</code></li>
+                        <li>Fallback palette: <code>#0b0e16 → #2f3050</code></li>
+                        <li>Accent ramp: <code>#7d8bff</code>, <code>#ffb457</code></li>
+                        <li>Typography stack: Manrope, system sans</li>
+                    </ul>
+                </article>
+                <article class="settings-card">
+                    <h3>Indexing Pipeline</h3>
+                    <ul>
+                        <li>Indexed image directory: <code>./scraped_images</code></li>
+                        <li>Text description fallback: <code>description.txt</code></li>
+                        <li>Batch size: 100 assets / upload</li>
+                        <li>Error budget: stop after 25 consecutive failures</li>
+                    </ul>
+                </article>
+                <article class="settings-card">
+                    <h3>Search Engine Defaults</h3>
+                    <ul>
+                        <li>Vector store: <code>qdrant://localhost:6333/image_search</code></li>
+                        <li>Top results: 12 (adjustable)</li>
+                        <li>Similarity metric: cosine</li>
+                        <li>Preview layout: adaptive grid</li>
+                    </ul>
+                </article>
+                <article class="settings-card">
+                    <h3>Advanced</h3>
+                    <ul>
+                        <li>Custom icon overrides: <code>static/branding/custom/</code></li>
+                        <li>Hot reload assets in debug mode</li>
+                        <li>Accessibility audit reminders every 7 days</li>
+                        <li>Offline cache refresh interval: 24h</li>
+                    </ul>
+                </article>
+            </div>
+        </section>
+    </main>
+    <footer>
+        Configure brand assets by replacing the placeholder SVG files under <code>static/branding/</code>.
+        All settings shown above are informational until wiring is complete.
+    </footer>
+    <script>
+        const settingsTrigger = document.getElementById('settings-trigger');
+        const settingsPanel = document.getElementById('settings-panel');
+        const settingsClose = document.getElementById('settings-close');
+
+        function showSettings(event) {
+            event.preventDefault();
+            settingsPanel.classList.add('active');
+            settingsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+
+        settingsTrigger.addEventListener('click', showSettings);
+        settingsClose.addEventListener('click', () => settingsPanel.classList.remove('active'));
+    </script>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K2 Projects • Placeholder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: radial-gradient(circle at top, #1f2234, #0b0e18 60%);
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f3f6ff;
+            --text-muted: rgba(243, 246, 255, 0.7);
+            --accent: #6c63ff;
+        }
+        *, *::before, *::after {
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 16px;
+        }
+        .shell {
+            width: min(720px, 100%);
+            padding: 48px;
+            border-radius: 28px;
+            backdrop-filter: blur(24px);
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 24px 60px rgba(8, 12, 30, 0.45);
+            text-align: center;
+        }
+        .shell h1 {
+            font-size: clamp(2rem, 4vw, 2.8rem);
+            font-weight: 700;
+            letter-spacing: -0.03em;
+        }
+        .shell p {
+            margin-top: 16px;
+            font-size: 1.05rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+        }
+        .actions {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .actions a {
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 999px;
+            border: 1px solid rgba(108, 99, 255, 0.35);
+            color: var(--text-main);
+            background: rgba(108, 99, 255, 0.15);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .actions a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px rgba(108, 99, 255, 0.25);
+        }
+    </style>
+</head>
+<body>
+    <div class="shell">
+        <h1>K2 Projects</h1>
+        <p>
+            This area is reserved for upcoming K2 project hubs. Use this placeholder while
+            the project catalogue, progress tracking, and collaboration features are being designed.
+        </p>
+        <p>
+            Keep all experimental assets under <code>static/k2-projects/</code> so they can be swapped safely later.
+        </p>
+        <div class="actions">
+            <a href="{{ url_for('landing') }}">Return to landing page</a>
+            <a href="mailto:design-team@example.com">Notify the design team</a>
+        </div>
+    </div>
+</body>
+</html>

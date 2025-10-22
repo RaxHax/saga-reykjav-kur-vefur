@@ -186,9 +186,27 @@ def index_images_background(image_folder):
     print(f"✅ Indexing complete! {success_count}/{len(image_files)} images indexed successfully")
 
 @app.route('/')
-def home():
-    """Serve the main page"""
+def landing():
+    """Serve the new landing page"""
     return render_template('index.html')
+
+
+@app.route('/workspace')
+def workspace():
+    """Temporary route that serves the existing workspace UI"""
+    return render_template('app.html')
+
+
+@app.route('/projects')
+def k2_projects():
+    """Placeholder route for K2 Projects hub"""
+    return render_template('k2_projects/index.html')
+
+
+@app.route('/search/engines')
+def k2_search():
+    """Placeholder route for the K2 search engine hub"""
+    return render_template('k2_search/index.html')
 
 @app.route('/api/index', methods=['POST'])
 def start_indexing():
