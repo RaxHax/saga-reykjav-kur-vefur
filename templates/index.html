@@ -6,348 +6,965 @@
     <title>K2 Control Surface</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            color-scheme: dark;
-            --bg-primary: radial-gradient(circle at top right, #2f3050, #0b0e16 58%);
-            --bg-noise: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23333b5c" fill-opacity="0.35"%3E%3Cpath d="M14 16h2v2h-2zM114 96h2v2h-2zM44 126h2v2h-2zM84 36h2v2h-2zM134 66h2v2h-2zM54 46h2v2h-2zM104 136h2v2h-2zM24 86h2v2h-2z"/%3E%3C/g%3E%3C/svg%3E');
-            --card-bg: rgba(15, 18, 32, 0.72);
-            --card-border: rgba(155, 172, 255, 0.16);
-            --card-hover: rgba(78, 91, 196, 0.25);
-            --brand-color: #7d8bff;
-            --text-strong: #f6f7ff;
-            --text-muted: rgba(246, 247, 255, 0.68);
-            --highlight: #ffb457;
-            --triangle-shadow: 0 20px 55px rgba(12, 12, 30, 0.55);
+            --bg-primary: #0a0a0f;
+            --bg-secondary: #12121a;
+            --text-primary: #ffffff;
+            --text-secondary: #9ca3af;
+            --text-muted: #6b7280;
+            
+            --glow-orange: #ff9500;
+            --glow-purple: #af52de;
+            --glow-cyan: #5ac8fa;
+            --glow-blue: #5856d6;
+            --glow-pink: #ff2d55;
+            --glow-green: #34c759;
+            
+            --hex-size: 160px;
+            --hex-gap: 8px;
         }
-        *, *::before, *::after { box-sizing: border-box; }
-        body {
-            margin: 0;
-            min-height: 100vh;
-            font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-strong);
-            position: relative;
-            overflow-x: hidden;
-        }
-        body::after {
-            content: "";
-            position: fixed;
-            inset: 0;
-            background: var(--bg-noise);
-            opacity: 0.18;
-            pointer-events: none;
-        }
-        header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: clamp(24px, 5vw, 48px) clamp(24px, 7vw, 80px) 0;
-            position: relative;
-            z-index: 1;
-        }
-        .brand {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-        }
-        .brand img {
-            width: clamp(54px, 9vw, 82px);
-            height: clamp(54px, 9vw, 82px);
-            object-fit: contain;
-            filter: drop-shadow(0 12px 24px rgba(125, 139, 255, 0.35));
-        }
-        .brand span {
-            font-weight: 700;
-            letter-spacing: 0.08em;
-            font-size: clamp(0.95rem, 2vw, 1.2rem);
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-        .brand strong {
-            display: block;
-            font-size: clamp(1.4rem, 3.2vw, 2.1rem);
-            letter-spacing: -0.02em;
-            color: var(--text-strong);
-        }
-        main {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-            gap: clamp(18px, 3vw, 36px);
-            padding: clamp(32px, 7vw, 96px) clamp(24px, 8vw, 120px) clamp(80px, 14vh, 140px);
-            position: relative;
-            z-index: 1;
-        }
-        .triangle-card {
-            position: relative;
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-            background: var(--card-bg);
-            border: 1px solid var(--card-border);
-            padding: clamp(56px, 12vw, 84px) clamp(16px, 4vw, 32px) clamp(36px, 6vw, 48px);
-            min-height: clamp(240px, 38vw, 320px);
-            backdrop-filter: blur(18px);
-            box-shadow: var(--triangle-shadow);
-            transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
-        }
-        .triangle-card.small {
-            min-height: clamp(190px, 32vw, 240px);
-            padding-top: clamp(42px, 9vw, 60px);
-        }
-        .triangle-card:hover {
-            transform: translateY(-10px);
-            border-color: rgba(125, 139, 255, 0.45);
-            background: linear-gradient(160deg, rgba(125, 139, 255, 0.2), rgba(33, 36, 64, 0.9));
-            box-shadow: 0 32px 60px rgba(34, 44, 144, 0.35);
-        }
-        .triangle-card:hover .card-label {
-            color: var(--highlight);
-        }
-        .card-inner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            height: 100%;
-            text-align: center;
-            gap: clamp(12px, 2.5vw, 18px);
-        }
-        .card-icon {
-            width: clamp(78px, 15vw, 108px);
-            height: clamp(78px, 15vw, 108px);
-            border-radius: 28px;
-            background: rgba(255, 255, 255, 0.04);
-            display: grid;
-            place-items: center;
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            padding: clamp(12px, 3vw, 16px);
-        }
-        .card-icon img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
-        .card-label {
-            font-size: clamp(1.1rem, 2.8vw, 1.8rem);
-            font-weight: 600;
-            letter-spacing: 0.01em;
-        }
-        .card-description {
-            color: var(--text-muted);
-            font-size: clamp(0.92rem, 2vw, 1.05rem);
-            line-height: 1.6;
-            max-width: 220px;
-            margin: 0 auto;
-        }
-        .settings-panel {
-            grid-column: 1 / -1;
-            margin-top: clamp(10px, 4vw, 26px);
-            padding: clamp(24px, 4vw, 36px);
-            background: rgba(9, 12, 24, 0.78);
-            border: 1px solid rgba(111, 125, 220, 0.22);
-            border-radius: 28px;
-            backdrop-filter: blur(16px);
-            box-shadow: 0 28px 70px rgba(8, 8, 24, 0.58);
-            display: none;
-        }
-        .settings-panel.active { display: block; }
-        .settings-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 18px;
-            margin-bottom: clamp(18px, 3vw, 26px);
-        }
-        .settings-header h2 {
-            margin: 0;
-            font-size: clamp(1.4rem, 2.6vw, 1.8rem);
-        }
-        .settings-header button {
-            border: none;
-            border-radius: 999px;
-            padding: 10px 18px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            background: rgba(255, 180, 87, 0.14);
-            color: var(--highlight);
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        .settings-header button:hover {
-            background: rgba(255, 180, 87, 0.24);
-        }
-        .settings-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: clamp(18px, 3vw, 28px);
-        }
-        .settings-card {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 22px;
-            padding: clamp(18px, 3vw, 24px);
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .settings-card h3 {
-            margin: 0;
-            font-size: 1.05rem;
-            font-weight: 600;
-            letter-spacing: 0.01em;
-        }
-        .settings-card ul {
-            list-style: none;
+        
+        * {
             margin: 0;
             padding: 0;
-            display: grid;
-            gap: 8px;
-            color: var(--text-muted);
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Background gradient effect */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 50%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 50%, rgba(175, 82, 222, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        
+        /* Dot pattern overlay */
+        .dot-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        /* Navigation */
+        nav {
+            position: relative;
+            z-index: 100;
+            padding: 2rem 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeInDown 0.6s ease;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+        
+        .logo svg {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .nav-actions {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
             font-size: 0.95rem;
-            line-height: 1.55;
+            transition: color 0.3s ease;
         }
-        .settings-card code {
-            background: rgba(125, 139, 255, 0.18);
-            padding: 2px 6px;
-            border-radius: 6px;
+        
+        .nav-link:hover {
+            color: var(--text-primary);
+        }
+        
+        .settings-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            color: var(--text-primary);
+            cursor: pointer;
             font-size: 0.9rem;
-            color: var(--text-strong);
+            transition: all 0.3s ease;
         }
+        
+        .settings-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+        
+        /* Main Content */
+        .container {
+            position: relative;
+            z-index: 10;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .hero-text {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 0.8s ease 0.2s both;
+        }
+        
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.03em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #a8a8a8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+        
+        /* Hexagon Grid */
+        .hex-grid {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: calc(var(--hex-gap) * 0.5);
+            position: relative;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+        
+        .hex-row {
+            display: flex;
+            gap: var(--hex-gap);
+        }
+        
+        .hex-row:nth-child(2) {
+            margin-left: calc(var(--hex-size) / 2 + var(--hex-gap) / 2);
+        }
+        
+        /* Hexagon Card */
+        .hex-wrapper {
+            position: relative;
+            width: var(--hex-size);
+            height: calc(var(--hex-size) * 0.866);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        
+        .hex-wrapper:hover {
+            transform: translateY(-5px) scale(1.05);
+            z-index: 20;
+        }
+        
+        .hex-wrapper:hover .hex-glow {
+            opacity: 0.6;
+            filter: blur(60px);
+        }
+        
+        .hex-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 140%;
+            height: 140%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            opacity: 0.4;
+            filter: blur(40px);
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        
+        .hex-glow.orange { background: var(--glow-orange); }
+        .hex-glow.purple { background: var(--glow-purple); }
+        .hex-glow.cyan { background: var(--glow-cyan); }
+        .hex-glow.blue { background: var(--glow-blue); }
+        .hex-glow.pink { background: var(--glow-pink); }
+        .hex-glow.green { background: var(--glow-green); }
+        
+        .hexagon {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background: rgba(20, 20, 30, 0.8);
+            backdrop-filter: blur(10px);
+            clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .hex-wrapper:hover .hexagon {
+            background: rgba(30, 30, 45, 0.9);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .hex-wrapper.large {
+            --hex-size: 200px;
+        }
+        
+        .hex-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            text-decoration: none;
+        }
+        
+        .hex-icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+        }
+        
+        .hex-wrapper.large .hex-icon {
+            width: 60px;
+            height: 60px;
+            font-size: 2.5rem;
+        }
+        
+        .hex-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            text-align: center;
+        }
+        
+        .hex-wrapper.large .hex-title {
+            font-size: 1rem;
+        }
+        
+        /* Settings Modal */
+        .settings-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .settings-overlay.active {
+            display: block;
+        }
+        
+        .settings-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 90%;
+            max-width: 900px;
+            max-height: 85vh;
+            background: linear-gradient(135deg, rgba(25, 25, 35, 0.95) 0%, rgba(15, 15, 20, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+            animation: slideIn 0.4s ease;
+        }
+        
+        .settings-modal.active {
+            display: block;
+        }
+        
+        .settings-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+        
+        .settings-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .settings-close {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+        
+        .settings-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-primary);
+        }
+        
+        .settings-content {
+            padding: 2rem;
+            overflow-y: auto;
+            max-height: calc(85vh - 100px);
+        }
+        
+        .settings-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding-bottom: 0;
+        }
+        
+        .settings-tab {
+            padding: 0.75rem 1.5rem;
+            background: none;
+            border: none;
+            border-bottom: 2px solid transparent;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            margin-bottom: -1px;
+        }
+        
+        .settings-tab:hover {
+            color: var(--text-primary);
+        }
+        
+        .settings-tab.active {
+            color: var(--text-primary);
+            border-bottom-color: var(--glow-blue);
+        }
+        
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .settings-group {
+            margin-bottom: 2rem;
+        }
+        
+        .settings-group h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .setting-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1rem 1.25rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        
+        .setting-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .setting-label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+        
+        .setting-label strong {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+        
+        .setting-label span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        
+        .setting-value {
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.85rem;
+            background: rgba(88, 86, 214, 0.1);
+            color: #a8a6ff;
+            padding: 0.35rem 0.75rem;
+            border-radius: 6px;
+            border: 1px solid rgba(88, 86, 214, 0.2);
+        }
+        
+        /* Footer */
         footer {
             position: relative;
-            z-index: 1;
-            padding: 24px clamp(24px, 8vw, 120px) 48px;
-            color: rgba(246, 247, 255, 0.45);
-            font-size: 0.88rem;
+            z-index: 10;
+            padding: 2rem 3rem;
+            text-align: center;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            margin-top: auto;
         }
-        @media (max-width: 820px) {
-            main {
-                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+        
+        .footer-brand svg {
+            width: 24px;
+            height: 24px;
+            opacity: 0.7;
+        }
+        
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
             }
-            .triangle-card {
-                min-height: clamp(200px, 50vw, 260px);
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -45%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            :root {
+                --hex-size: 120px;
+            }
+            
+            .hero-text h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero-text p {
+                font-size: 1.1rem;
+            }
+            
+            .hex-wrapper.large {
+                --hex-size: 150px;
+            }
+            
+            nav {
+                padding: 1.5rem;
+            }
+            
+            .settings-modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            :root {
+                --hex-size: 100px;
+                --hex-gap: 6px;
+            }
+            
+            .hex-wrapper.large {
+                --hex-size: 120px;
+            }
+            
+            .hero-text {
+                margin-bottom: 3rem;
+            }
+            
+            .hero-text h1 {
+                font-size: 2rem;
+            }
+            
+            .hero-text p {
+                font-size: 1rem;
+            }
+            
+            .hex-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 1.5rem;
+            }
+            
+            .hex-title {
+                font-size: 0.8rem;
+            }
+            
+            .settings-tabs {
+                overflow-x: auto;
             }
         }
     </style>
 </head>
 <body>
-    <header>
-        <div class="brand">
-            <img src="{{ url_for('static', filename='branding/logos/placeholder-logo.svg') }}" alt="K2 placeholder logo">
-            <div>
-                <span>Design system preview</span>
-                <strong>K2 Control Surface</strong>
+    <div class="dot-pattern"></div>
+    
+    <nav>
+        <div class="logo">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="12 2 2 7 2 17 12 22 22 17 22 7 12 2"/>
+            </svg>
+            <span>K2 Control Surface</span>
+        </div>
+        <div class="nav-actions">
+            <a href="/workspace" class="nav-link">Legacy Workspace</a>
+            <a href="#" class="nav-link">Documentation</a>
+            <button class="settings-btn" onclick="openSettings()">
+                <span>⚙️ Settings</span>
+            </button>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="hero-text">
+            <h1>Control Surface</h1>
+            <p>Unified interface for semantic search, project management, and system configuration</p>
+        </div>
+        
+        <div class="hex-grid">
+            <div class="hex-row">
+                <div class="hex-wrapper">
+                    <div class="hex-glow orange"></div>
+                    <div class="hexagon">
+                        <a href="{{ url_for('workspace') }}" class="hex-content">
+                            <div class="hex-icon">🔍</div>
+                            <div class="hex-title">Search</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="hex-wrapper">
+                    <div class="hex-glow purple"></div>
+                    <div class="hexagon">
+                        <a href="{{ url_for('workspace') }}" class="hex-content">
+                            <div class="hex-icon">📸</div>
+                            <div class="hex-title">Images</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="hex-wrapper">
+                    <div class="hex-glow cyan"></div>
+                    <div class="hexagon">
+                        <a href="{{ url_for('workspace') }}" class="hex-content">
+                            <div class="hex-icon">📊</div>
+                            <div class="hex-title">Analytics</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="hex-row">
+                <div class="hex-wrapper large">
+                    <div class="hex-glow blue"></div>
+                    <div class="hexagon">
+                        <a href="{{ url_for('k2_projects') }}" class="hex-content">
+                            <div class="hex-icon">🚀</div>
+                            <div class="hex-title">Projects</div>
+                        </a>
+                    </div>
+                </div>
+                <div class="hex-wrapper large">
+                    <div class="hex-glow pink"></div>
+                    <div class="hexagon">
+                        <a href="{{ url_for('k2_search') }}" class="hex-content">
+                            <div class="hex-icon">🎯</div>
+                            <div class="hex-title">Engines</div>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="brand" aria-hidden="true">
-            <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="">
-            <div>
-                <span>Brand assets</span>
-                <strong>Editable Soon</strong>
+    </div>
+    
+    <!-- Settings Modal -->
+    <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-header">
+            <h2>System Configuration</h2>
+            <button class="settings-close" onclick="closeSettings()">✕</button>
+        </div>
+        <div class="settings-content">
+            <div class="settings-tabs">
+                <button class="settings-tab active" onclick="switchTab('general')">General</button>
+                <button class="settings-tab" onclick="switchTab('search')">Search Engine</button>
+                <button class="settings-tab" onclick="switchTab('indexing')">Indexing</button>
+                <button class="settings-tab" onclick="switchTab('theme')">Appearance</button>
+                <button class="settings-tab" onclick="switchTab('advanced')">Advanced</button>
+            </div>
+            
+            <div class="tab-content active" id="generalTab">
+                <div class="settings-group">
+                    <h3>System Information</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Version</strong>
+                            <span>Current system version</span>
+                        </div>
+                        <div class="setting-value">v2.0.0-beta</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Environment</strong>
+                            <span>Runtime environment</span>
+                        </div>
+                        <div class="setting-value">production</div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Storage Paths</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Data Directory</strong>
+                            <span>Primary data storage location</span>
+                        </div>
+                        <div class="setting-value">./data</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Cache Directory</strong>
+                            <span>Temporary file storage</span>
+                        </div>
+                        <div class="setting-value">./cache</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="searchTab">
+                <div class="settings-group">
+                    <h3>Vector Database</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Connection String</strong>
+                            <span>Qdrant database endpoint</span>
+                        </div>
+                        <div class="setting-value">qdrant://localhost:6333</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Collection Name</strong>
+                            <span>Active collection</span>
+                        </div>
+                        <div class="setting-value">image_search</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Similarity Metric</strong>
+                            <span>Distance calculation method</span>
+                        </div>
+                        <div class="setting-value">cosine</div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Search Configuration</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Default Results</strong>
+                            <span>Number of results to return</span>
+                        </div>
+                        <div class="setting-value">12</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Score Threshold</strong>
+                            <span>Minimum similarity score</span>
+                        </div>
+                        <div class="setting-value">0.2</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="indexingTab">
+                <div class="settings-group">
+                    <h3>Image Processing</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Source Directory</strong>
+                            <span>Default image folder</span>
+                        </div>
+                        <div class="setting-value">./scraped_images</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Batch Size</strong>
+                            <span>Images per batch</span>
+                        </div>
+                        <div class="setting-value">100</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Supported Formats</strong>
+                            <span>Accepted file types</span>
+                        </div>
+                        <div class="setting-value">.jpg, .png, .jpeg</div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Model Configuration</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>CLIP Model</strong>
+                            <span>Vision-language model</span>
+                        </div>
+                        <div class="setting-value">ViT-B-32</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Device</strong>
+                            <span>Processing unit</span>
+                        </div>
+                        <div class="setting-value">cuda</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="themeTab">
+                <div class="settings-group">
+                    <h3>Color Scheme</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Theme Mode</strong>
+                            <span>Interface appearance</span>
+                        </div>
+                        <div class="setting-value">dark</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Accent Color</strong>
+                            <span>Primary accent</span>
+                        </div>
+                        <div class="setting-value">#5856d6</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Glow Effects</strong>
+                            <span>Enable visual effects</span>
+                        </div>
+                        <div class="setting-value">enabled</div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Typography</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Font Family</strong>
+                            <span>Primary typeface</span>
+                        </div>
+                        <div class="setting-value">Inter</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Font Size</strong>
+                            <span>Base font size</span>
+                        </div>
+                        <div class="setting-value">16px</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tab-content" id="advancedTab">
+                <div class="settings-group">
+                    <h3>Performance</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Max Workers</strong>
+                            <span>Concurrent processing threads</span>
+                        </div>
+                        <div class="setting-value">4</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Cache TTL</strong>
+                            <span>Cache expiration time</span>
+                        </div>
+                        <div class="setting-value">86400s</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>Debug Mode</strong>
+                            <span>Enable debug logging</span>
+                        </div>
+                        <div class="setting-value">disabled</div>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <h3>Security</h3>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>API Authentication</strong>
+                            <span>Require authentication</span>
+                        </div>
+                        <div class="setting-value">disabled</div>
+                    </div>
+                    <div class="setting-item">
+                        <div class="setting-label">
+                            <strong>CORS Policy</strong>
+                            <span>Cross-origin requests</span>
+                        </div>
+                        <div class="setting-value">localhost</div>
+                    </div>
+                </div>
             </div>
         </div>
-    </header>
-    <main>
-        <a class="triangle-card" href="{{ url_for('k2_projects') }}">
-            <div class="card-inner">
-                <div class="card-icon">
-                    <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="Placeholder icon for K2 projects">
-                </div>
-                <div class="card-label">K2 Projects</div>
-                <p class="card-description">Curated project suites. Placeholder canvas waiting for detailed module specs.</p>
-            </div>
-        </a>
-        <a class="triangle-card" href="{{ url_for('k2_search') }}">
-            <div class="card-inner">
-                <div class="card-icon">
-                    <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="Placeholder icon for K2 search">
-                </div>
-                <div class="card-label">K2 Search Engines</div>
-                <p class="card-description">Entry point for semantic image search. Legacy experience still available during rebuild.</p>
-            </div>
-        </a>
-        <a class="triangle-card small" href="#settings" id="settings-trigger">
-            <div class="card-inner">
-                <div class="card-icon">
-                    <img src="{{ url_for('static', filename='branding/icons/placeholder-icon.svg') }}" alt="Placeholder icon for settings">
-                </div>
-                <div class="card-label">Settings</div>
-                <p class="card-description">Adjust folders, theming and ingest defaults.</p>
-            </div>
-        </a>
-        <section class="settings-panel" id="settings-panel">
-            <div class="settings-header">
-                <h2>Workspace Settings Preview</h2>
-                <button type="button" id="settings-close">Hide panel</button>
-            </div>
-            <div class="settings-grid">
-                <article class="settings-card">
-                    <h3>Brand Assets</h3>
-                    <ul>
-                        <li>Icon source directory: <code>static/branding/icons/</code></li>
-                        <li>Logo source directory: <code>static/branding/logos/</code></li>
-                        <li>Image library bucket: <code>static/branding/images/</code></li>
-                    </ul>
-                </article>
-                <article class="settings-card">
-                    <h3>Colour &amp; Theme</h3>
-                    <ul>
-                        <li>Theme profile: <code>themes/aurora.json</code></li>
-                        <li>Fallback palette: <code>#0b0e16 → #2f3050</code></li>
-                        <li>Accent ramp: <code>#7d8bff</code>, <code>#ffb457</code></li>
-                        <li>Typography stack: Manrope, system sans</li>
-                    </ul>
-                </article>
-                <article class="settings-card">
-                    <h3>Indexing Pipeline</h3>
-                    <ul>
-                        <li>Indexed image directory: <code>./scraped_images</code></li>
-                        <li>Text description fallback: <code>description.txt</code></li>
-                        <li>Batch size: 100 assets / upload</li>
-                        <li>Error budget: stop after 25 consecutive failures</li>
-                    </ul>
-                </article>
-                <article class="settings-card">
-                    <h3>Search Engine Defaults</h3>
-                    <ul>
-                        <li>Vector store: <code>qdrant://localhost:6333/image_search</code></li>
-                        <li>Top results: 12 (adjustable)</li>
-                        <li>Similarity metric: cosine</li>
-                        <li>Preview layout: adaptive grid</li>
-                    </ul>
-                </article>
-                <article class="settings-card">
-                    <h3>Advanced</h3>
-                    <ul>
-                        <li>Custom icon overrides: <code>static/branding/custom/</code></li>
-                        <li>Hot reload assets in debug mode</li>
-                        <li>Accessibility audit reminders every 7 days</li>
-                        <li>Offline cache refresh interval: 24h</li>
-                    </ul>
-                </article>
-            </div>
-        </section>
-    </main>
+    </div>
+    
     <footer>
-        Configure brand assets by replacing the placeholder SVG files under <code>static/branding/</code>.
-        All settings shown above are informational until wiring is complete.
+        <div class="footer-brand">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <polygon points="12 2 2 7 2 17 12 22 22 17 22 7 12 2"/>
+            </svg>
+            <span>K2 Control Surface • 2025</span>
+        </div>
     </footer>
+    
     <script>
-        const settingsTrigger = document.getElementById('settings-trigger');
-        const settingsPanel = document.getElementById('settings-panel');
-        const settingsClose = document.getElementById('settings-close');
-
-        function showSettings(event) {
-            event.preventDefault();
-            settingsPanel.classList.add('active');
-            settingsPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Settings Modal
+        function openSettings() {
+            document.getElementById('settingsOverlay').classList.add('active');
+            document.getElementById('settingsModal').classList.add('active');
         }
-
-        settingsTrigger.addEventListener('click', showSettings);
-        settingsClose.addEventListener('click', () => settingsPanel.classList.remove('active'));
+        
+        function closeSettings() {
+            document.getElementById('settingsOverlay').classList.remove('active');
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+        
+        function switchTab(tabName) {
+            // Remove active from all tabs and contents
+            document.querySelectorAll('.settings-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Add active to clicked tab and corresponding content
+            event.target.classList.add('active');
+            document.getElementById(tabName + 'Tab').classList.add('active');
+        }
+        
+        // Hexagon hover effects
+        document.querySelectorAll('.hex-wrapper').forEach(hex => {
+            hex.addEventListener('mouseenter', function() {
+                this.style.zIndex = '20';
+            });
+            
+            hex.addEventListener('mouseleave', function() {
+                setTimeout(() => {
+                    this.style.zIndex = '';
+                }, 300);
+            });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeSettings();
+            }
+        });
+        
+        // Prevent modal close when clicking inside
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            e.stopPropagation();
+        });
     </script>
 </body>
 </html>
