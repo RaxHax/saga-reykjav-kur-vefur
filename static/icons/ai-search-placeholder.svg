@@ -1,0 +1,14 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="aiSearchGradient" x1="24" y1="24" x2="136" y2="136" gradientUnits="userSpaceOnUse">
+            <stop stop-color="#5AC8FA"/>
+            <stop offset="1" stop-color="#AF52DE"/>
+        </linearGradient>
+    </defs>
+    <rect x="20" y="20" width="120" height="120" rx="26" fill="url(#aiSearchGradient)" opacity="0.15" stroke="url(#aiSearchGradient)" stroke-width="2"/>
+    <circle cx="76" cy="74" r="34" stroke="url(#aiSearchGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+    <line x1="102.828" y1="100.828" x2="130" y2="128" stroke="url(#aiSearchGradient)" stroke-width="10" stroke-linecap="round"/>
+    <circle cx="60" cy="60" r="6" fill="#5AC8FA"/>
+    <circle cx="88" cy="56" r="6" fill="#AF52DE"/>
+    <circle cx="72" cy="88" r="6" fill="#34C759"/>
+</svg>

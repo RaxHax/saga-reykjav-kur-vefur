@@ -9,29 +9,24 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-primary: #0a0a0f;
-            --bg-secondary: #12121a;
+            --bg-primary: #05050b;
+            --bg-secondary: #111120;
             --text-primary: #ffffff;
             --text-secondary: #9ca3af;
             --text-muted: #6b7280;
-            
-            --glow-orange: #ff9500;
-            --glow-purple: #af52de;
-            --glow-cyan: #5ac8fa;
-            --glow-blue: #5856d6;
-            --glow-pink: #ff2d55;
-            --glow-green: #34c759;
-            
-            --hex-size: 160px;
-            --hex-gap: 8px;
+            --card-border: rgba(255, 255, 255, 0.08);
+            --card-hover: rgba(255, 255, 255, 0.16);
+            --accent-blue: #5ac8fa;
+            --accent-purple: #af52de;
+            --accent-orange: #ff9500;
         }
-        
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
             background: var(--bg-primary);
@@ -42,93 +37,88 @@
             display: flex;
             flex-direction: column;
         }
-        
-        /* Background gradient effect */
+
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 30% 50%, rgba(88, 86, 214, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 70% 50%, rgba(175, 82, 222, 0.1) 0%, transparent 50%);
+            inset: 0;
+            background: radial-gradient(circle at 20% 20%, rgba(88, 86, 214, 0.18) 0%, transparent 45%),
+                        radial-gradient(circle at 80% 30%, rgba(175, 82, 222, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 80%, rgba(90, 200, 250, 0.1) 0%, transparent 55%);
             pointer-events: none;
             z-index: 0;
         }
-        
-        /* Dot pattern overlay */
+
         .dot-pattern {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+            inset: 0;
+            background-image: radial-gradient(circle, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+            background-size: 28px 28px;
             pointer-events: none;
             z-index: 1;
         }
-        
-        /* Navigation */
+
         nav {
             position: relative;
-            z-index: 100;
-            padding: 2rem 3rem;
+            z-index: 10;
+            padding: 2.25rem 3rem 1.5rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            animation: fadeInDown 0.6s ease;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
             gap: 1rem;
-            font-size: 1.5rem;
+            font-size: 1.4rem;
             font-weight: 700;
             letter-spacing: -0.02em;
         }
-        
+
         .logo svg {
             width: 40px;
             height: 40px;
         }
-        
+
         .nav-actions {
             display: flex;
-            gap: 1.5rem;
+            gap: 1.25rem;
             align-items: center;
         }
-        
+
         .nav-link {
             color: var(--text-secondary);
             text-decoration: none;
             font-size: 0.95rem;
             transition: color 0.3s ease;
         }
-        
+
         .nav-link:hover {
             color: var(--text-primary);
         }
-        
+
         .settings-btn {
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 0.6rem 1.2rem;
+            border-radius: 999px;
             color: var(--text-primary);
             cursor: pointer;
             font-size: 0.9rem;
             transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
         }
-        
+
         .settings-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            transform: translateY(-2px);
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
         }
-        
-        /* Main Content */
+
         .container {
             position: relative;
             z-index: 10;
@@ -137,340 +127,161 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
-            max-width: 1400px;
+            padding: 2rem 2.5rem 4rem;
+            max-width: 1200px;
             margin: 0 auto;
             width: 100%;
-        }
-        
-        .hero-text {
             text-align: center;
-            margin-bottom: 4rem;
-            animation: fadeIn 0.8s ease 0.2s both;
         }
-        
+
+        .hero-text {
+            margin-bottom: 4rem;
+            max-width: 680px;
+            animation: fadeIn 0.7s ease 0.1s both;
+        }
+
         .hero-text h1 {
-            font-size: 3.5rem;
+            font-size: clamp(2.5rem, 5vw, 3.8rem);
             font-weight: 700;
-            letter-spacing: -0.03em;
+            letter-spacing: -0.04em;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #ffffff 0%, #a8a8a8 100%);
+            background: linear-gradient(135deg, #ffffff 0%, #c9c9c9 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .hero-text p {
-            font-size: 1.25rem;
+            font-size: 1.2rem;
             color: var(--text-secondary);
-            max-width: 600px;
-            margin: 0 auto;
-            line-height: 1.6;
+            line-height: 1.7;
         }
-        
-        /* Hexagon Grid */
-        .hex-grid {
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 2.5rem;
+            width: 100%;
+            max-width: 720px;
+            animation: fadeInUp 0.9s ease 0.25s both;
+        }
+
+        .action-card {
+            position: relative;
+            background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, rgba(17, 17, 32, 0.8) 80%);
+            border: 1px solid var(--card-border);
+            border-radius: 28px;
+            padding: 2.5rem 2.25rem 2.75rem;
+            text-decoration: none;
+            color: inherit;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: calc(var(--hex-gap) * 0.5);
-            position: relative;
-            animation: fadeInUp 1s ease 0.4s both;
+            gap: 1.25rem;
+            transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+            backdrop-filter: blur(20px);
         }
-        
-        .hex-row {
-            display: flex;
-            gap: var(--hex-gap);
-        }
-        
-        .hex-row:nth-child(2) {
-            margin-left: calc(var(--hex-size) / 2 + var(--hex-gap) / 2);
-        }
-        
-        /* Hexagon Card */
-        .hex-wrapper {
-            position: relative;
-            width: var(--hex-size);
-            height: calc(var(--hex-size) * 0.866);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-        
-        .hex-wrapper:hover {
-            transform: translateY(-5px) scale(1.05);
-            z-index: 20;
-        }
-        
-        .hex-wrapper:hover .hex-glow {
-            opacity: 0.6;
-            filter: blur(60px);
-        }
-        
-        .hex-glow {
+
+        .action-card::after {
+            content: '';
             position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 140%;
-            height: 140%;
-            transform: translate(-50%, -50%);
-            border-radius: 50%;
-            opacity: 0.4;
-            filter: blur(40px);
-            transition: all 0.3s ease;
+            inset: 1px;
+            border-radius: 27px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
             pointer-events: none;
         }
-        
-        .hex-glow.orange { background: var(--glow-orange); }
-        .hex-glow.purple { background: var(--glow-purple); }
-        .hex-glow.cyan { background: var(--glow-cyan); }
-        .hex-glow.blue { background: var(--glow-blue); }
-        .hex-glow.pink { background: var(--glow-pink); }
-        .hex-glow.green { background: var(--glow-green); }
-        
-        .hexagon {
-            width: 100%;
-            height: 100%;
+
+        .action-card:hover {
+            transform: translateY(-6px) scale(1.01);
+            border-color: var(--card-hover);
+            box-shadow: 0 30px 60px rgba(10, 10, 20, 0.4);
+        }
+
+        .action-card:hover .action-cta {
+            color: #ffffff;
+        }
+
+        .action-card-glow {
+            position: absolute;
+            width: 160%;
+            height: 160%;
+            filter: blur(90px);
+            opacity: 0.35;
+            transition: opacity 0.4s ease;
+        }
+
+        .action-card:hover .action-card-glow {
+            opacity: 0.55;
+        }
+
+        .glow-blue {
+            background: radial-gradient(circle, rgba(90, 200, 250, 0.9) 0%, rgba(90, 200, 250, 0) 60%);
+        }
+
+        .glow-purple {
+            background: radial-gradient(circle, rgba(175, 82, 222, 0.9) 0%, rgba(175, 82, 222, 0) 60%);
+        }
+
+        .icon-hex {
+            width: 120px;
+            height: 108px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+            background: linear-gradient(140deg, rgba(255, 255, 255, 0.12) 0%, rgba(17, 17, 32, 0.65) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             position: relative;
-            background: rgba(20, 20, 30, 0.8);
-            backdrop-filter: blur(10px);
-            clip-path: polygon(30% 0%, 70% 0%, 100% 50%, 70% 100%, 30% 100%, 0% 50%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
         }
-        
-        .hex-wrapper:hover .hexagon {
-            background: rgba(30, 30, 45, 0.9);
-            border-color: rgba(255, 255, 255, 0.2);
+
+        .icon-hex::before {
+            content: '';
+            position: absolute;
+            inset: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            clip-path: inherit;
+            opacity: 0.6;
         }
-        
-        .hex-wrapper.large {
-            --hex-size: 200px;
-        }
-        
-        .hex-content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            padding: 1rem;
-            text-decoration: none;
-        }
-        
-        .hex-icon {
-            width: 48px;
-            height: 48px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-        }
-        
-        .hex-wrapper.large .hex-icon {
-            width: 60px;
-            height: 60px;
-            font-size: 2.5rem;
-        }
-        
-        .hex-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            text-align: center;
-        }
-        
-        .hex-wrapper.large .hex-title {
-            font-size: 1rem;
-        }
-        
-        /* Settings Modal */
-        .settings-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .settings-overlay.active {
-            display: block;
-        }
-        
-        .settings-modal {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 90%;
-            max-width: 900px;
-            max-height: 85vh;
-            background: linear-gradient(135deg, rgba(25, 25, 35, 0.95) 0%, rgba(15, 15, 20, 0.95) 100%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            z-index: 1001;
-            display: none;
-            overflow: hidden;
-            animation: slideIn 0.4s ease;
-        }
-        
-        .settings-modal.active {
-            display: block;
-        }
-        
-        .settings-header {
-            padding: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-            display: flex;
-            justify-content: between;
-            align-items: center;
-        }
-        
-        .settings-header h2 {
-            font-size: 1.75rem;
-            font-weight: 600;
-            flex: 1;
-        }
-        
-        .settings-close {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: var(--text-secondary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.25rem;
-            transition: all 0.3s ease;
-        }
-        
-        .settings-close:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: var(--text-primary);
-        }
-        
-        .settings-content {
-            padding: 2rem;
-            overflow-y: auto;
-            max-height: calc(85vh - 100px);
-        }
-        
-        .settings-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 0;
-        }
-        
-        .settings-tab {
-            padding: 0.75rem 1.5rem;
-            background: none;
-            border: none;
-            border-bottom: 2px solid transparent;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.3s ease;
+
+        .action-icon {
+            width: 64px;
+            height: 64px;
             position: relative;
-            margin-bottom: -1px;
+            z-index: 2;
         }
-        
-        .settings-tab:hover {
-            color: var(--text-primary);
-        }
-        
-        .settings-tab.active {
-            color: var(--text-primary);
-            border-bottom-color: var(--glow-blue);
-        }
-        
-        .tab-content {
-            display: none;
-            animation: fadeIn 0.3s ease;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        .settings-group {
-            margin-bottom: 2rem;
-        }
-        
-        .settings-group h3 {
+
+        .action-title {
             font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
         }
-        
-        .setting-item {
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 1rem 1.25rem;
-            margin-bottom: 0.75rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        
-        .setting-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.1);
-        }
-        
-        .setting-label {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-        
-        .setting-label strong {
+
+        .action-description {
+            color: var(--text-secondary);
             font-size: 0.95rem;
-            color: var(--text-primary);
+            line-height: 1.6;
+            max-width: 320px;
         }
-        
-        .setting-label span {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+
+        .action-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.75);
+            transition: color 0.3s ease;
         }
-        
-        .setting-value {
-            font-family: 'Monaco', 'Menlo', monospace;
-            font-size: 0.85rem;
-            background: rgba(88, 86, 214, 0.1);
-            color: #a8a6ff;
-            padding: 0.35rem 0.75rem;
-            border-radius: 6px;
-            border: 1px solid rgba(88, 86, 214, 0.2);
-        }
-        
-        /* Footer */
+
         footer {
             position: relative;
             z-index: 10;
-            padding: 2rem 3rem;
+            padding: 2rem 3rem 3rem;
             text-align: center;
             border-top: 1px solid rgba(255, 255, 255, 0.05);
-            margin-top: auto;
         }
-        
+
         .footer-brand {
             display: flex;
             align-items: center;
@@ -479,30 +290,238 @@
             font-size: 0.9rem;
             color: var(--text-muted);
         }
-        
+
         .footer-brand svg {
             width: 24px;
             height: 24px;
-            opacity: 0.7;
+            opacity: 0.6;
         }
-        
-        /* Animations */
+
+        .settings-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.65);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            display: none;
+        }
+
+        .settings-overlay.active {
+            display: block;
+        }
+
+        .settings-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(920px, 92vw);
+            max-height: 86vh;
+            background: linear-gradient(160deg, rgba(20, 20, 35, 0.95) 0%, rgba(10, 10, 20, 0.95) 100%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 28px;
+            z-index: 1001;
+            display: none;
+            overflow: hidden;
+            box-shadow: 0 30px 80px rgba(3, 6, 15, 0.65);
+        }
+
+        .settings-modal.active {
+            display: block;
+        }
+
+        .settings-header {
+            padding: 2rem 2.25rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .settings-header h2 {
+            font-size: 1.75rem;
+            font-weight: 600;
+        }
+
+        .settings-close {
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-secondary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .settings-close:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+        }
+
+        .settings-content {
+            padding: 2rem 2.25rem 2.5rem;
+            overflow-y: auto;
+            max-height: calc(86vh - 110px);
+        }
+
+        .settings-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .overview-card {
+            position: relative;
+            padding: 1.5rem;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .overview-card::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: 17px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .overview-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.14em;
+            color: var(--text-muted);
+        }
+
+        .overview-value {
+            display: block;
+            margin-top: 0.85rem;
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .overview-card p {
+            margin-top: 0.75rem;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .status-online {
+            color: #34c759;
+        }
+
+        .settings-tabs {
+            display: flex;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            padding-bottom: 0.6rem;
+            flex-wrap: wrap;
+        }
+
+        .settings-tab {
+            padding: 0.75rem 1.5rem;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid transparent;
+            border-radius: 999px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .settings-tab.active {
+            color: var(--text-primary);
+            border-color: rgba(90, 200, 250, 0.35);
+            background: rgba(90, 200, 250, 0.12);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .settings-grid {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .settings-grid.two-column {
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        }
+
+        .settings-group h3 {
+            font-size: 1.05rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        .setting-item {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 14px;
+            padding: 1.15rem 1.4rem;
+            margin-bottom: 0.85rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 1.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .setting-item:hover {
+            border-color: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .setting-label {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3rem;
+        }
+
+        .setting-label strong {
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        .setting-label span {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .setting-value {
+            font-family: 'Menlo', 'Monaco', monospace;
+            font-size: 0.85rem;
+            padding: 0.45rem 0.85rem;
+            border-radius: 999px;
+            background: rgba(90, 200, 250, 0.12);
+            border: 1px solid rgba(90, 200, 250, 0.28);
+            color: #a7e1ff;
+            white-space: nowrap;
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; }
             to { opacity: 1; }
         }
-        
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
+
         @keyframes fadeInUp {
             from {
                 opacity: 0;
@@ -513,87 +532,48 @@
                 transform: translateY(0);
             }
         }
-        
-        @keyframes slideIn {
-            from {
-                opacity: 0;
-                transform: translate(-50%, -45%);
-            }
-            to {
-                opacity: 1;
-                transform: translate(-50%, -50%);
-            }
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            :root {
-                --hex-size: 120px;
-            }
-            
-            .hero-text h1 {
-                font-size: 2.5rem;
-            }
-            
-            .hero-text p {
-                font-size: 1.1rem;
-            }
-            
-            .hex-wrapper.large {
-                --hex-size: 150px;
-            }
-            
+
+        @media (max-width: 960px) {
             nav {
-                padding: 1.5rem;
-            }
-            
-            .settings-modal {
-                width: 95%;
-                max-height: 90vh;
+                padding: 1.75rem 2rem 1.25rem;
             }
         }
-        
-        @media (max-width: 640px) {
-            :root {
-                --hex-size: 100px;
-                --hex-gap: 6px;
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1.25rem;
+                text-align: center;
             }
-            
-            .hex-wrapper.large {
-                --hex-size: 120px;
+
+            .nav-actions {
+                flex-wrap: wrap;
+                justify-content: center;
             }
-            
+
+            .container {
+                padding: 2rem 1.5rem 3rem;
+            }
+
             .hero-text {
                 margin-bottom: 3rem;
             }
-            
-            .hero-text h1 {
-                font-size: 2rem;
+        }
+
+        @media (max-width: 640px) {
+            .settings-content {
+                padding: 1.75rem 1.5rem 2rem;
             }
-            
-            .hero-text p {
-                font-size: 1rem;
-            }
-            
-            .hex-icon {
-                width: 36px;
-                height: 36px;
-                font-size: 1.5rem;
-            }
-            
-            .hex-title {
-                font-size: 0.8rem;
-            }
-            
-            .settings-tabs {
-                overflow-x: auto;
+
+            .settings-header {
+                padding: 1.5rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="dot-pattern"></div>
-    
+
     <nav>
         <div class="logo">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -602,75 +582,43 @@
             <span>K2 Control Surface</span>
         </div>
         <div class="nav-actions">
-            <a href="/workspace" class="nav-link">Legacy Workspace</a>
+            <a href="{{ url_for('k2_search') }}" class="nav-link">AI Search</a>
             <a href="#" class="nav-link">Documentation</a>
             <button class="settings-btn" onclick="openSettings()">
-                <span>⚙️ Settings</span>
+                <span>⚙️</span>
+                <span>Settings</span>
             </button>
         </div>
     </nav>
-    
-    <div class="container">
+
+    <main class="container">
         <div class="hero-text">
-            <h1>Control Surface</h1>
-            <p>Unified interface for semantic search, project management, and system configuration</p>
+            <h1>Design your K2 experience</h1>
+            <p>Navigate between intelligent search and project orchestration with a refined interface inspired by the Saga Reykjavík workshop.</p>
         </div>
-        
-        <div class="hex-grid">
-            <div class="hex-row">
-                <div class="hex-wrapper">
-                    <div class="hex-glow orange"></div>
-                    <div class="hexagon">
-                        <a href="{{ url_for('workspace') }}" class="hex-content">
-                            <div class="hex-icon">🔍</div>
-                            <div class="hex-title">Search</div>
-                        </a>
-                    </div>
+
+        <div class="action-grid">
+            <a href="{{ url_for('k2_projects') }}" class="action-card">
+                <div class="action-card-glow glow-purple"></div>
+                <div class="icon-hex">
+                    <img class="action-icon" src="{{ url_for('static', filename='icons/projects-placeholder.svg') }}" alt="Projects icon">
                 </div>
-                <div class="hex-wrapper">
-                    <div class="hex-glow purple"></div>
-                    <div class="hexagon">
-                        <a href="{{ url_for('workspace') }}" class="hex-content">
-                            <div class="hex-icon">📸</div>
-                            <div class="hex-title">Images</div>
-                        </a>
-                    </div>
+                <div class="action-title">K2 Projects</div>
+                <p class="action-description">Plan initiatives, track milestones, and collaborate in a focused workspace crafted for clarity.</p>
+                <span class="action-cta">Open workspace →</span>
+            </a>
+            <a href="{{ url_for('k2_search') }}" class="action-card">
+                <div class="action-card-glow glow-blue"></div>
+                <div class="icon-hex">
+                    <img class="action-icon" src="{{ url_for('static', filename='icons/ai-search-placeholder.svg') }}" alt="AI search engine icon">
                 </div>
-                <div class="hex-wrapper">
-                    <div class="hex-glow cyan"></div>
-                    <div class="hexagon">
-                        <a href="{{ url_for('workspace') }}" class="hex-content">
-                            <div class="hex-icon">📊</div>
-                            <div class="hex-title">Analytics</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="hex-row">
-                <div class="hex-wrapper large">
-                    <div class="hex-glow blue"></div>
-                    <div class="hexagon">
-                        <a href="{{ url_for('k2_projects') }}" class="hex-content">
-                            <div class="hex-icon">🚀</div>
-                            <div class="hex-title">Projects</div>
-                        </a>
-                    </div>
-                </div>
-                <div class="hex-wrapper large">
-                    <div class="hex-glow pink"></div>
-                    <div class="hexagon">
-                        <a href="{{ url_for('k2_search') }}" class="hex-content">
-                            <div class="hex-icon">🎯</div>
-                            <div class="hex-title">Engines</div>
-                        </a>
-                    </div>
-                </div>
-            </div>
+                <div class="action-title">AI Image Search Engine</div>
+                <p class="action-description">Explore curated visuals with semantic search powered by vector intelligence and adaptive ranking.</p>
+                <span class="action-cta">Start searching →</span>
+            </a>
         </div>
-    </div>
-    
-    <!-- Settings Modal -->
+    </main>
+
     <div class="settings-overlay" id="settingsOverlay" onclick="closeSettings()"></div>
     <div class="settings-modal" id="settingsModal">
         <div class="settings-header">
@@ -678,234 +626,299 @@
             <button class="settings-close" onclick="closeSettings()">✕</button>
         </div>
         <div class="settings-content">
+            <div class="settings-overview">
+                <div class="overview-card">
+                    <span class="overview-label">System Status</span>
+                    <span class="overview-value status-online">Operational</span>
+                    <p>Services, background jobs, and workers are running within nominal ranges.</p>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-label">Active Collection</span>
+                    <span class="overview-value">image_search</span>
+                    <p>Primary dataset is indexed and ready for semantic retrieval.</p>
+                </div>
+                <div class="overview-card">
+                    <span class="overview-label">Last Sync</span>
+                    <span class="overview-value">12 minutes ago</span>
+                    <p>Latest ingest cycle completed successfully with no pending jobs.</p>
+                </div>
+            </div>
+
             <div class="settings-tabs">
-                <button class="settings-tab active" onclick="switchTab('general')">General</button>
-                <button class="settings-tab" onclick="switchTab('search')">Search Engine</button>
-                <button class="settings-tab" onclick="switchTab('indexing')">Indexing</button>
-                <button class="settings-tab" onclick="switchTab('theme')">Appearance</button>
-                <button class="settings-tab" onclick="switchTab('advanced')">Advanced</button>
+                <button class="settings-tab active" onclick="switchTab(event, 'general')">General</button>
+                <button class="settings-tab" onclick="switchTab(event, 'search')">Search Engine</button>
+                <button class="settings-tab" onclick="switchTab(event, 'indexing')">Indexing</button>
+                <button class="settings-tab" onclick="switchTab(event, 'theme')">Appearance</button>
+                <button class="settings-tab" onclick="switchTab(event, 'advanced')">Advanced</button>
             </div>
-            
+
             <div class="tab-content active" id="generalTab">
-                <div class="settings-group">
-                    <h3>System Information</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Version</strong>
-                            <span>Current system version</span>
+                <div class="settings-grid two-column">
+                    <div class="settings-group">
+                        <h3>System Information</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Version</strong>
+                                <span>Current system version</span>
+                            </div>
+                            <div class="setting-value">v2.0.0-beta</div>
                         </div>
-                        <div class="setting-value">v2.0.0-beta</div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Environment</strong>
+                                <span>Runtime environment</span>
+                            </div>
+                            <div class="setting-value">production</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Uptime</strong>
+                                <span>Time since last restart</span>
+                            </div>
+                            <div class="setting-value">36h 14m</div>
+                        </div>
                     </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Environment</strong>
-                            <span>Runtime environment</span>
+                    <div class="settings-group">
+                        <h3>Storage Paths</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Data Directory</strong>
+                                <span>Primary data storage location</span>
+                            </div>
+                            <div class="setting-value">./data</div>
                         </div>
-                        <div class="setting-value">production</div>
-                    </div>
-                </div>
-                
-                <div class="settings-group">
-                    <h3>Storage Paths</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Data Directory</strong>
-                            <span>Primary data storage location</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Cache Directory</strong>
+                                <span>Temporary file storage</span>
+                            </div>
+                            <div class="setting-value">./cache</div>
                         </div>
-                        <div class="setting-value">./data</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Cache Directory</strong>
-                            <span>Temporary file storage</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Backups</strong>
+                                <span>Automated snapshot cadence</span>
+                            </div>
+                            <div class="setting-value">daily</div>
                         </div>
-                        <div class="setting-value">./cache</div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-content" id="searchTab">
-                <div class="settings-group">
-                    <h3>Vector Database</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Connection String</strong>
-                            <span>Qdrant database endpoint</span>
+                <div class="settings-grid two-column">
+                    <div class="settings-group">
+                        <h3>Vector Database</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Connection String</strong>
+                                <span>Qdrant database endpoint</span>
+                            </div>
+                            <div class="setting-value">qdrant://localhost:6333</div>
                         </div>
-                        <div class="setting-value">qdrant://localhost:6333</div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Collection Name</strong>
+                                <span>Active collection</span>
+                            </div>
+                            <div class="setting-value">image_search</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Similarity Metric</strong>
+                                <span>Distance calculation method</span>
+                            </div>
+                            <div class="setting-value">cosine</div>
+                        </div>
                     </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Collection Name</strong>
-                            <span>Active collection</span>
+                    <div class="settings-group">
+                        <h3>Search Configuration</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Default Results</strong>
+                                <span>Number of results to return</span>
+                            </div>
+                            <div class="setting-value">12</div>
                         </div>
-                        <div class="setting-value">image_search</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Similarity Metric</strong>
-                            <span>Distance calculation method</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Score Threshold</strong>
+                                <span>Minimum similarity score</span>
+                            </div>
+                            <div class="setting-value">0.2</div>
                         </div>
-                        <div class="setting-value">cosine</div>
-                    </div>
-                </div>
-                
-                <div class="settings-group">
-                    <h3>Search Configuration</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Default Results</strong>
-                            <span>Number of results to return</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Re-Ranking</strong>
+                                <span>Enable contextual reranking</span>
+                            </div>
+                            <div class="setting-value">enabled</div>
                         </div>
-                        <div class="setting-value">12</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Score Threshold</strong>
-                            <span>Minimum similarity score</span>
-                        </div>
-                        <div class="setting-value">0.2</div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-content" id="indexingTab">
-                <div class="settings-group">
-                    <h3>Image Processing</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Source Directory</strong>
-                            <span>Default image folder</span>
+                <div class="settings-grid two-column">
+                    <div class="settings-group">
+                        <h3>Image Processing</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Source Directory</strong>
+                                <span>Default image folder</span>
+                            </div>
+                            <div class="setting-value">./scraped_images</div>
                         </div>
-                        <div class="setting-value">./scraped_images</div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Batch Size</strong>
+                                <span>Images per batch</span>
+                            </div>
+                            <div class="setting-value">100</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Supported Formats</strong>
+                                <span>Accepted file types</span>
+                            </div>
+                            <div class="setting-value">.jpg, .png, .jpeg</div>
+                        </div>
                     </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Batch Size</strong>
-                            <span>Images per batch</span>
+                    <div class="settings-group">
+                        <h3>Model Configuration</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>CLIP Model</strong>
+                                <span>Vision-language model</span>
+                            </div>
+                            <div class="setting-value">ViT-B-32</div>
                         </div>
-                        <div class="setting-value">100</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Supported Formats</strong>
-                            <span>Accepted file types</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Device</strong>
+                                <span>Processing unit</span>
+                            </div>
+                            <div class="setting-value">cuda</div>
                         </div>
-                        <div class="setting-value">.jpg, .png, .jpeg</div>
-                    </div>
-                </div>
-                
-                <div class="settings-group">
-                    <h3>Model Configuration</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>CLIP Model</strong>
-                            <span>Vision-language model</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Augmentations</strong>
+                                <span>Preprocessing pipeline</span>
+                            </div>
+                            <div class="setting-value">standard</div>
                         </div>
-                        <div class="setting-value">ViT-B-32</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Device</strong>
-                            <span>Processing unit</span>
-                        </div>
-                        <div class="setting-value">cuda</div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-content" id="themeTab">
-                <div class="settings-group">
-                    <h3>Color Scheme</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Theme Mode</strong>
-                            <span>Interface appearance</span>
+                <div class="settings-grid two-column">
+                    <div class="settings-group">
+                        <h3>Color Scheme</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Theme Mode</strong>
+                                <span>Interface appearance</span>
+                            </div>
+                            <div class="setting-value">dark</div>
                         </div>
-                        <div class="setting-value">dark</div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Accent Color</strong>
+                                <span>Primary accent</span>
+                            </div>
+                            <div class="setting-value">#5856d6</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Glow Effects</strong>
+                                <span>Enable visual effects</span>
+                            </div>
+                            <div class="setting-value">enabled</div>
+                        </div>
                     </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Accent Color</strong>
-                            <span>Primary accent</span>
+                    <div class="settings-group">
+                        <h3>Typography</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Font Family</strong>
+                                <span>Primary typeface</span>
+                            </div>
+                            <div class="setting-value">Inter</div>
                         </div>
-                        <div class="setting-value">#5856d6</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Glow Effects</strong>
-                            <span>Enable visual effects</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Font Size</strong>
+                                <span>Base font size</span>
+                            </div>
+                            <div class="setting-value">16px</div>
                         </div>
-                        <div class="setting-value">enabled</div>
-                    </div>
-                </div>
-                
-                <div class="settings-group">
-                    <h3>Typography</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Font Family</strong>
-                            <span>Primary typeface</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Line Height</strong>
+                                <span>Default rhythm</span>
+                            </div>
+                            <div class="setting-value">1.6</div>
                         </div>
-                        <div class="setting-value">Inter</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Font Size</strong>
-                            <span>Base font size</span>
-                        </div>
-                        <div class="setting-value">16px</div>
                     </div>
                 </div>
             </div>
-            
+
             <div class="tab-content" id="advancedTab">
-                <div class="settings-group">
-                    <h3>Performance</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Max Workers</strong>
-                            <span>Concurrent processing threads</span>
+                <div class="settings-grid two-column">
+                    <div class="settings-group">
+                        <h3>Performance</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Max Workers</strong>
+                                <span>Concurrent processing threads</span>
+                            </div>
+                            <div class="setting-value">4</div>
                         </div>
-                        <div class="setting-value">4</div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Cache TTL</strong>
+                                <span>Cache expiration time</span>
+                            </div>
+                            <div class="setting-value">86400s</div>
+                        </div>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Debug Mode</strong>
+                                <span>Enable debug logging</span>
+                            </div>
+                            <div class="setting-value">disabled</div>
+                        </div>
                     </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Cache TTL</strong>
-                            <span>Cache expiration time</span>
+                    <div class="settings-group">
+                        <h3>Security</h3>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>API Authentication</strong>
+                                <span>Require authentication</span>
+                            </div>
+                            <div class="setting-value">disabled</div>
                         </div>
-                        <div class="setting-value">86400s</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>Debug Mode</strong>
-                            <span>Enable debug logging</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>CORS Policy</strong>
+                                <span>Cross-origin requests</span>
+                            </div>
+                            <div class="setting-value">localhost</div>
                         </div>
-                        <div class="setting-value">disabled</div>
-                    </div>
-                </div>
-                
-                <div class="settings-group">
-                    <h3>Security</h3>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>API Authentication</strong>
-                            <span>Require authentication</span>
+                        <div class="setting-item">
+                            <div class="setting-label">
+                                <strong>Audit Trail</strong>
+                                <span>Log retention</span>
+                            </div>
+                            <div class="setting-value">30 days</div>
                         </div>
-                        <div class="setting-value">disabled</div>
-                    </div>
-                    <div class="setting-item">
-                        <div class="setting-label">
-                            <strong>CORS Policy</strong>
-                            <span>Cross-origin requests</span>
-                        </div>
-                        <div class="setting-value">localhost</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <footer>
         <div class="footer-brand">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -914,55 +927,39 @@
             <span>K2 Control Surface • 2025</span>
         </div>
     </footer>
-    
+
     <script>
-        // Settings Modal
         function openSettings() {
             document.getElementById('settingsOverlay').classList.add('active');
             document.getElementById('settingsModal').classList.add('active');
         }
-        
+
         function closeSettings() {
             document.getElementById('settingsOverlay').classList.remove('active');
             document.getElementById('settingsModal').classList.remove('active');
         }
-        
-        function switchTab(tabName) {
-            // Remove active from all tabs and contents
-            document.querySelectorAll('.settings-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-            });
-            
-            // Add active to clicked tab and corresponding content
-            event.target.classList.add('active');
-            document.getElementById(tabName + 'Tab').classList.add('active');
+
+        function switchTab(event, tabName) {
+            const tabs = document.querySelectorAll('.settings-tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach(tab => tab.classList.remove('active'));
+            contents.forEach(content => content.classList.remove('active'));
+
+            event.currentTarget.classList.add('active');
+            const activeContent = document.getElementById(`${tabName}Tab`);
+            if (activeContent) {
+                activeContent.classList.add('active');
+            }
         }
-        
-        // Hexagon hover effects
-        document.querySelectorAll('.hex-wrapper').forEach(hex => {
-            hex.addEventListener('mouseenter', function() {
-                this.style.zIndex = '20';
-            });
-            
-            hex.addEventListener('mouseleave', function() {
-                setTimeout(() => {
-                    this.style.zIndex = '';
-                }, 300);
-            });
-        });
-        
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
+
+        document.addEventListener('keydown', function (e) {
             if (e.key === 'Escape') {
                 closeSettings();
             }
         });
-        
-        // Prevent modal close when clicking inside
-        document.getElementById('settingsModal').addEventListener('click', function(e) {
+
+        document.getElementById('settingsModal').addEventListener('click', function (e) {
             e.stopPropagation();
         });
     </script>
