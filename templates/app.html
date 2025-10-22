@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Library</title>
+    <style>
+        :root {
+            color-scheme: dark;
+            --glass-bg: rgba(255, 255, 255, 0.08);
+            --glass-border: rgba(255, 255, 255, 0.18);
+            --text-primary: #f5f7fb;
+            --text-secondary: rgba(245, 247, 251, 0.7);
+            --accent: #6ae7ff;
+            --accent-strong: #37c5ff;
+            --danger: #ff7b7b;
+            --success: #7bffa7;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: radial-gradient(circle at top left, #243045, #0d111a 55%);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        .bg-orb {
+            position: fixed;
+            width: 480px;
+            height: 480px;
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+        }
+
+        .bg-orb.orb-1 {
+            top: -180px;
+            left: -120px;
+            background: rgba(58, 204, 255, 0.35);
+        }
+
+        .bg-orb.orb-2 {
+            bottom: -220px;
+            right: -140px;
+            background: rgba(186, 108, 255, 0.35);
+        }
+
+        .app-shell {
+            position: relative;
+            z-index: 1;
+            display: flex;
+            min-height: 100vh;
+            padding: 32px;
+            gap: 24px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(28px);
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 60px rgba(3, 9, 21, 0.35);
+            border-radius: 24px;
+        }
+
+        .sidebar {
+            width: 280px;
+            padding: 32px 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 28px;
+        }
+
+        .logo h1 {
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo span.icon {
+            display: inline-flex;
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(106, 231, 255, 0.3), rgba(55, 197, 255, 0.65));
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+
+        .nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            color: var(--text-primary);
+        }
+
+        .nav-item.active {
+            background: rgba(58, 204, 255, 0.18);
+            color: var(--text-primary);
+            border: 1px solid rgba(106, 231, 255, 0.4);
+            box-shadow: 0 8px 18px rgba(55, 197, 255, 0.2);
+        }
+
+        .status-badge {
+            align-self: flex-start;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(122, 255, 209, 0.12);
+            border: 1px solid rgba(122, 255, 209, 0.35);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--success);
+        }
+
+        .status-badge.indexing {
+            background: rgba(255, 203, 122, 0.12);
+            border-color: rgba(255, 203, 122, 0.35);
+            color: #ffc77a;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .stat-block {
+            padding: 16px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 6px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .topbar {
+            margin-bottom: 24px;
+            padding: 22px 28px;
+            display: flex;
+            align-items: center;
+            gap: 18px;
+        }
+
+        .topbar .title {
+            font-size: 26px;
+            font-weight: 600;
+        }
+
+        .status-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-left: auto;
+        }
+
+        .search-panel {
+            padding: 28px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .search-bar {
+            display: flex;
+            gap: 12px;
+            align-items: stretch;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            padding: 12px;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+
+        .search-input-wrapper svg {
+            position: absolute;
+            top: 50%;
+            left: 16px;
+            transform: translateY(-50%);
+            width: 18px;
+            height: 18px;
+            color: var(--text-secondary);
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 14px 16px 14px 48px;
+            border: none;
+            background: rgba(9, 14, 26, 0.45);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+        }
+
+        .search-input::placeholder {
+            color: rgba(245, 247, 251, 0.35);
+        }
+
+        .btn {
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn:focus-visible {
+            outline: 2px solid rgba(106, 231, 255, 0.45);
+            outline-offset: 2px;
+        }
+
+        .btn-primary {
+            padding: 0 26px;
+            background: linear-gradient(135deg, rgba(106, 231, 255, 0.9), rgba(55, 197, 255, 0.95));
+            color: #04121f;
+            box-shadow: 0 12px 24px rgba(55, 197, 255, 0.35);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 18px 30px rgba(55, 197, 255, 0.45);
+        }
+
+        .btn-secondary {
+            padding: 14px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .filters-grid {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .filter-card {
+            flex: 1;
+            min-width: 200px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-card label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        select, input[type="number"] {
+            background: rgba(9, 14, 26, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            padding: 10px 14px;
+            color: var(--text-primary);
+            font-size: 14px;
+            outline: none;
+        }
+
+        .notification-area {
+            display: none;
+            margin-bottom: 20px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(255, 255, 255, 0.08);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .notification-area.visible {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .notification-area.success {
+            border-color: rgba(122, 255, 209, 0.45);
+            background: rgba(122, 255, 209, 0.16);
+            color: var(--success);
+        }
+
+        .notification-area.error {
+            border-color: rgba(255, 123, 123, 0.45);
+            background: rgba(255, 123, 123, 0.16);
+            color: var(--danger);
+        }
+
+        .results-section {
+            padding: 0 28px 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .masonry-grid {
+            column-count: 4;
+            column-gap: 20px;
+        }
+
+        @media (max-width: 1500px) { .masonry-grid { column-count: 3; } }
+        @media (max-width: 1100px) { .masonry-grid { column-count: 2; } }
+
+        .image-card {
+            break-inside: avoid;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(4, 12, 24, 0.45);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 50px rgba(3, 10, 22, 0.6);
+        }
+
+        .image-card img {
+            width: 100%;
+            display: block;
+        }
+
+        .image-info {
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .image-score {
+            align-self: flex-start;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 600;
+            background: rgba(106, 231, 255, 0.18);
+            color: var(--accent);
+        }
+
+        .image-filename {
+            font-weight: 600;
+        }
+
+        .image-description {
+            color: var(--text-secondary);
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 80px 40px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .empty-icon {
+            font-size: 36px;
+        }
+
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            padding: 60px 0;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .index-view {
+            padding: 28px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .index-card {
+            max-width: 620px;
+            width: 100%;
+            padding: 32px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            background: rgba(9, 14, 26, 0.45);
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-help {
+            font-size: 13px;
+            color: rgba(245, 247, 251, 0.45);
+        }
+
+        .progress-card {
+            padding: 24px;
+            border-radius: 18px;
+            border: 1px solid rgba(106, 231, 255, 0.35);
+            background: rgba(106, 231, 255, 0.1);
+            display: none;
+            flex-direction: column;
+            gap: 18px;
+        }
+
+        .progress-card.active { display: flex; }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 10px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.08);
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+            transition: width 0.3s ease;
+        }
+
+        .progress-meta {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(3, 6, 12, 0.78);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 200;
+        }
+
+        .modal.active { display: flex; }
+
+        .modal-content {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 360px;
+            gap: 24px;
+            padding: 24px;
+            width: min(90vw, 1180px);
+        }
+
+        .modal-figure {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 22px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-figure img {
+            max-width: 100%;
+            max-height: 76vh;
+            border-radius: 16px;
+        }
+
+        .modal-panel {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 22px;
+            padding: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 24px;
+            right: 32px;
+            width: 42px;
+            height: 42px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-primary);
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        .modal-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 12px;
+        }
+
+        .modal-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .modal-field label {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .modal-field span {
+            font-size: 15px;
+        }
+
+        @media (max-width: 1200px) {
+            .app-shell {
+                flex-direction: column;
+                padding: 24px;
+            }
+
+            .sidebar {
+                width: 100%;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .nav {
+                flex-direction: row;
+            }
+
+            .main-content {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 900px) {
+            .modal-content {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .nav {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div class="app-shell">
+        <aside class="sidebar glass-card">
+            <div class="logo">
+                <h1><span class="icon">📷</span> Image Library</h1>
+            </div>
+            <div class="status-badge" id="statusBadge">Ready</div>
+            <nav class="nav">
+                <div class="nav-item active" data-view="search">
+                    <span>🔍</span>
+                    <div>
+                        <div style="font-weight:600;">Search</div>
+                        <div style="font-size:12px; color: var(--text-secondary);">Find the perfect image</div>
+                    </div>
+                </div>
+                <div class="nav-item" data-view="index">
+                    <span>⚙️</span>
+                    <div>
+                        <div style="font-weight:600;">Index</div>
+                        <div style="font-size:12px; color: var(--text-secondary);">Add new content</div>
+                    </div>
+                </div>
+            </nav>
+            <div class="stats-grid">
+                <div class="stat-block">
+                    <div class="stat-label">Images Indexed</div>
+                    <div class="stat-value" id="totalImages">-</div>
+                </div>
+                <div class="stat-block">
+                    <div class="stat-label">Device</div>
+                    <div class="stat-value" id="deviceInfo">-</div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <header class="topbar glass-card">
+                <div class="title">Your Visual Workspace</div>
+                <div class="status-wrapper">
+                    <span style="font-size:13px; color: var(--text-secondary);">Press <kbd>/</kbd> to focus search</span>
+                </div>
+            </header>
+
+            <section class="search-view glass-card" id="searchView">
+                <div class="search-panel">
+                    <div id="notification" class="notification-area" role="status" aria-live="polite"></div>
+
+                    <div class="search-bar">
+                        <div class="search-input-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="11" cy="11" r="7" />
+                                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                            </svg>
+                            <input id="searchQuery" class="search-input" type="text" placeholder="Describe the image you need..." autocomplete="off">
+                        </div>
+                        <button class="btn btn-primary" onclick="searchImages()">Search</button>
+                    </div>
+
+                    <div class="filters-grid">
+                        <div class="filter-card">
+                            <label for="resultsCount">Results</label>
+                            <select id="resultsCount" onchange="updateResultsCount()">
+                                <option value="10">Top 10</option>
+                                <option value="20">Top 20</option>
+                                <option value="30">Top 30</option>
+                            </select>
+                        </div>
+                        <div class="filter-card">
+                            <label for="minScore">Minimum Match Score</label>
+                            <input id="minScore" type="number" min="0" max="1" step="0.05" value="0.2" onchange="updateResultsCount()">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="results-section">
+                    <div class="results-header">
+                        <span id="resultsCountText">Enter a search query to begin</span>
+                        <button class="btn btn-secondary" onclick="cycleGridSize()">Adjust Grid</button>
+                    </div>
+
+                    <div id="searchLoading" class="loading-state" style="display: none;">
+                        <div class="spinner"></div>
+                        <p>Searching through your library...</p>
+                    </div>
+
+                    <div id="searchResults" class="masonry-grid"></div>
+                </div>
+            </section>
+
+            <section class="index-view glass-card" id="indexView" style="display: none;">
+                <div class="index-card">
+                    <div>
+                        <h2 style="font-size:22px; margin-bottom:8px;">Index New Images</h2>
+                        <p style="color: var(--text-secondary); font-size:14px;">Process a folder and add it to your library.</p>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="folderPath">Folder Path</label>
+                        <input type="text" class="form-input" id="folderPath" placeholder="/path/to/images" value="./scraped_images">
+                        <span class="form-help">Supports .jpg, .png and matching .txt description files.</span>
+                    </div>
+
+                    <button class="btn btn-primary" style="width: fit-content; align-self: flex-end;" onclick="startIndexing()">Start Indexing</button>
+
+                    <div id="progressCard" class="progress-card">
+                        <div>
+                            <strong id="progressTitle">Indexing in progress...</strong>
+                            <div id="progressMessage" style="margin-top:6px; color: var(--text-secondary); font-size:13px;">Initializing...</div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div id="progressBarFill" class="progress-bar-fill"></div>
+                        </div>
+                        <div class="progress-meta">
+                            <span id="progressText">Waiting for updates...</span>
+                            <span id="progressPercent">0%</span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="imageModal" class="modal" role="dialog" aria-modal="true">
+        <button class="modal-close" onclick="closeModal()" aria-label="Close image viewer">×</button>
+        <div class="modal-content">
+            <div class="modal-figure">
+                <img id="modalImage" src="" alt="">
+            </div>
+            <div class="modal-panel">
+                <div class="modal-section">
+                    <h3>Details</h3>
+                    <div class="modal-field">
+                        <label>Filename</label>
+                        <span id="modalFilename">-</span>
+                    </div>
+                    <div class="modal-field">
+                        <label>Match Score</label>
+                        <span id="modalScore">-</span>
+                    </div>
+                    <div class="modal-field">
+                        <label>Description</label>
+                        <span id="modalDescription">-</span>
+                    </div>
+                </div>
+                <div class="modal-section">
+                    <h3>Actions</h3>
+                    <button class="btn btn-secondary" onclick="copyPath()">Copy File Path</button>
+                    <button class="btn btn-secondary" onclick="openInFolder()">Show in Folder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentResults = [];
+        let currentModalIndex = 0;
+        let currentModalPath = '';
+        let indexingInterval = null;
+
+        loadStats();
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement !== document.getElementById('searchQuery')) {
+                e.preventDefault();
+                document.getElementById('searchQuery').focus();
+            }
+            if (e.key === 'Escape') {
+                closeModal();
+            }
+            if (document.getElementById('imageModal').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') navigateModal(-1);
+                if (e.key === 'ArrowRight') navigateModal(1);
+            }
+        });
+
+        document.getElementById('searchQuery').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchImages();
+            }
+        });
+
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+
+                const view = item.dataset.view;
+                document.getElementById('searchView').style.display = view === 'search' ? 'block' : 'none';
+                document.getElementById('indexView').style.display = view === 'index' ? 'flex' : 'none';
+            });
+        });
+
+        let gridColumns = 4;
+        function cycleGridSize() {
+            gridColumns = gridColumns === 4 ? 3 : gridColumns === 3 ? 5 : 4;
+            document.querySelector('.masonry-grid').style.columnCount = gridColumns;
+        }
+
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                document.getElementById('totalImages').textContent = data.total_images.toLocaleString();
+                document.getElementById('deviceInfo').textContent = data.device.toUpperCase();
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('notification');
+            notification.className = `notification-area visible ${type !== 'info' ? type : ''}`.trim();
+            notification.textContent = message;
+            if (type !== 'error') {
+                setTimeout(() => {
+                    notification.className = 'notification-area';
+                    notification.textContent = '';
+                }, 4000);
+            }
+        }
+
+        async function searchImages() {
+            const query = document.getElementById('searchQuery').value.trim();
+            if (!query) {
+                showNotification('Enter a description to start searching.', 'error');
+                return;
+            }
+
+            const resultsDiv = document.getElementById('searchResults');
+            const loadingDiv = document.getElementById('searchLoading');
+            const countText = document.getElementById('resultsCountText');
+
+            resultsDiv.innerHTML = '';
+            loadingDiv.style.display = 'flex';
+            countText.textContent = 'Searching...';
+
+            const topK = parseInt(document.getElementById('resultsCount').value, 10);
+            const minScore = parseFloat(document.getElementById('minScore').value);
+
+            try {
+                const response = await fetch('/api/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, top_k: topK })
+                });
+
+                const data = await response.json();
+                loadingDiv.style.display = 'none';
+
+                currentResults = data.results.filter(r => r.score >= minScore);
+
+                if (currentResults.length === 0) {
+                    resultsDiv.innerHTML = `
+                        <div class="empty-state">
+                            <div class="empty-icon">🌫️</div>
+                            <div style="font-size:18px; font-weight:600; color:var(--text-primary);">No matches found</div>
+                            <div>Try adjusting your search terms or lowering the match threshold.</div>
+                        </div>
+                    `;
+                    countText.textContent = 'No results';
+                    return;
+                }
+
+                countText.textContent = `${currentResults.length} results for "${query}"`;
+
+                currentResults.forEach((result, index) => {
+                    const card = document.createElement('div');
+                    card.className = 'image-card';
+                    card.onclick = () => openModal(result, index);
+
+                    const scorePercent = (result.score * 100).toFixed(0);
+
+                    card.innerHTML = `
+                        <img src="/api/image/${encodeURIComponent(result.path)}" loading="lazy" alt="${result.filename}">
+                        <div class="image-info">
+                            <div class="image-score">${scorePercent}% match</div>
+                            <div class="image-filename">${result.filename}</div>
+                            ${result.description ? `<div class="image-description">${result.description}</div>` : ''}
+                        </div>
+                    `;
+
+                    resultsDiv.appendChild(card);
+                });
+            } catch (error) {
+                loadingDiv.style.display = 'none';
+                countText.textContent = 'Error searching';
+                showNotification(`Search failed: ${error.message}`, 'error');
+            }
+        }
+
+        function updateResultsCount() {
+            if (document.getElementById('searchQuery').value.trim()) {
+                searchImages();
+            }
+        }
+
+        async function startIndexing() {
+            const folderPath = document.getElementById('folderPath').value.trim();
+            if (!folderPath) {
+                showNotification('Please enter a folder path before indexing.', 'error');
+                return;
+            }
+
+            const progressCard = document.getElementById('progressCard');
+            progressCard.classList.add('active');
+            document.getElementById('progressTitle').textContent = 'Indexing in progress...';
+            document.getElementById('progressMessage').textContent = 'Initializing...';
+            document.getElementById('progressBarFill').style.width = '0%';
+            document.getElementById('progressPercent').textContent = '0%';
+            document.getElementById('progressText').textContent = 'Waiting for updates...';
+            document.getElementById('statusBadge').textContent = 'Indexing';
+            document.getElementById('statusBadge').classList.add('indexing');
+
+            try {
+                const response = await fetch('/api/index', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ folder: folderPath })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showNotification(data.message || 'Indexing started.', 'success');
+                    pollIndexingStatus();
+                } else {
+                    progressCard.classList.remove('active');
+                    document.getElementById('statusBadge').textContent = 'Ready';
+                    document.getElementById('statusBadge').classList.remove('indexing');
+                    showNotification(data.error || 'Unable to start indexing.', 'error');
+                }
+            } catch (error) {
+                progressCard.classList.remove('active');
+                document.getElementById('statusBadge').textContent = 'Ready';
+                document.getElementById('statusBadge').classList.remove('indexing');
+                showNotification(`Indexing failed: ${error.message}`, 'error');
+            }
+        }
+
+        async function pollIndexingStatus() {
+            if (indexingInterval) {
+                clearInterval(indexingInterval);
+            }
+
+            indexingInterval = setInterval(async () => {
+                try {
+                    const response = await fetch('/api/index/status');
+                    const status = await response.json();
+
+                    const percent = status.total > 0 ? Math.round((status.progress / status.total) * 100) : 0;
+                    document.getElementById('progressBarFill').style.width = percent + '%';
+                    document.getElementById('progressPercent').textContent = percent + '%';
+                    document.getElementById('progressText').textContent = `${status.progress} / ${status.total} processed`;
+                    document.getElementById('progressMessage').textContent = status.message || 'Indexing...';
+
+                    if (!status.is_indexing) {
+                        clearInterval(indexingInterval);
+                        indexingInterval = null;
+                        document.getElementById('statusBadge').textContent = 'Ready';
+                        document.getElementById('statusBadge').classList.remove('indexing');
+                        document.getElementById('progressTitle').textContent = 'Indexing complete';
+                        document.getElementById('progressMessage').textContent = status.message || 'Finished processing.';
+                        if (status.progress === 0) {
+                            document.getElementById('progressBarFill').style.width = '0%';
+                            document.getElementById('progressPercent').textContent = '0%';
+                            document.getElementById('progressText').textContent = 'No files processed';
+                        }
+                        setTimeout(() => {
+                            document.getElementById('progressCard').classList.remove('active');
+                        }, 3500);
+                        loadStats();
+                        if (status.message) {
+                            showNotification(status.message, status.progress === 0 ? 'error' : 'success');
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error polling status:', error);
+                }
+            }, 1000);
+        }
+
+        function openModal(result, index) {
+            currentModalIndex = index;
+            currentModalPath = result.path;
+
+            const modal = document.getElementById('imageModal');
+            document.getElementById('modalImage').src = `/api/image/${encodeURIComponent(result.path)}`;
+            document.getElementById('modalFilename').textContent = result.filename;
+            document.getElementById('modalScore').textContent = (result.score * 100).toFixed(1) + '% match';
+            document.getElementById('modalDescription').textContent = result.description || 'No description available';
+            modal.classList.add('active');
+        }
+
+        function closeModal() {
+            document.getElementById('imageModal').classList.remove('active');
+        }
+
+        function navigateModal(direction) {
+            const newIndex = currentModalIndex + direction;
+            if (newIndex >= 0 && newIndex < currentResults.length) {
+                openModal(currentResults[newIndex], newIndex);
+            }
+        }
+
+        function copyPath() {
+            if (!currentModalPath) return;
+            navigator.clipboard.writeText(currentModalPath);
+            showNotification('File path copied to clipboard.', 'success');
+        }
+
+        function openInFolder() {
+            if (!currentModalPath) return;
+            showNotification(`Path: ${currentModalPath}`, 'info');
+        }
+    </script>
+</body>
+</html>

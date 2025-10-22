@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K2 Search Engines • Placeholder</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            color-scheme: dark;
+            --bg: radial-gradient(circle at center, #211f34, #090b14 65%);
+            --panel-bg: rgba(255, 255, 255, 0.05);
+            --panel-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f6f7ff;
+            --text-muted: rgba(246, 247, 255, 0.68);
+            --accent: #ffb457;
+        }
+        *, *::before, *::after { box-sizing: border-box; }
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: var(--bg);
+            color: var(--text-main);
+            font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 18px;
+        }
+        .panel {
+            width: min(760px, 100%);
+            padding: 48px;
+            background: var(--panel-bg);
+            border-radius: 32px;
+            backdrop-filter: blur(26px);
+            border: 1px solid var(--panel-border);
+            box-shadow: 0 28px 70px rgba(10, 9, 30, 0.45);
+        }
+        h1 {
+            margin: 0;
+            font-size: clamp(2.1rem, 4.4vw, 3rem);
+            letter-spacing: -0.025em;
+        }
+        p {
+            margin-top: 18px;
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.65;
+        }
+        .cta {
+            margin-top: 40px;
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .cta a {
+            text-decoration: none;
+            padding: 14px 24px;
+            border-radius: 999px;
+            border: 1px solid rgba(255, 180, 87, 0.4);
+            background: rgba(255, 180, 87, 0.14);
+            color: var(--text-main);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .cta a:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 16px 30px rgba(255, 180, 87, 0.2);
+        }
+        .cta a.secondary {
+            border-color: rgba(255, 255, 255, 0.16);
+            background: transparent;
+        }
+    </style>
+</head>
+<body>
+    <div class="panel">
+        <h1>K2 Search Engines</h1>
+        <p>
+            The refreshed semantic search workspace will live here. Use this placeholder
+            while the navigation, camera ingest, and Qdrant integration flows are rebuilt.
+        </p>
+        <p>
+            Existing functionality is still available via the experimental workspace below.
+        </p>
+        <div class="cta">
+            <a href="/workspace">Open legacy workspace</a>
+            <a class="secondary" href="{{ url_for('landing') }}">Back to landing page</a>
+        </div>
+    </div>
+</body>
+</html>
