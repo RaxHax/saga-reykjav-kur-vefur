@@ -1,0 +1,8 @@
+flask==3.0.0
+flask-cors==4.0.0
+torch==2.1.2
+open-clip-torch==2.24.0
+pillow==10.2.0
+qdrant-client==1.7.0
+python-dotenv==1.0.0
+deep-translator==1.11.4

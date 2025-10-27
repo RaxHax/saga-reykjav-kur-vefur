@@ -1,310 +1,365 @@
-# SAGA Reykjavík - Modern Visual Search Platform
+# 🖼️ SAGA Reykjavík - Image Search System
 
-A production-ready, AI-powered semantic image search platform designed for Icelandic visual archives. Features include dark-tech UI with hexagonal honeycomb design, Icelandic language support, hybrid search capabilities, and dedicated job management services.
+Modern, elegant image search platform with AI-powered semantic search and beautiful iOS-inspired glassmorphic design.
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
-![Python](https://img.shields.io/badge/python-3.9+-green)
-![Node](https://img.shields.io/badge/node-18+-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
+## 📋 Overview
 
-## 🌟 Features
+This project has been refactored into **two separate applications**:
 
-### Core Capabilities
-- **Semantic Image Search** - CLIP-powered visual search using natural language queries
-- **Icelandic Language Support** - Automatic translation for Icelandic queries with fallback
-- **Hybrid Search** - Combine text semantics with metadata filters for precision
-- **Real-time Indexing** - Background job processing with progress tracking
-- **Modern React UI** - Dark-tech design with honeycomb feature cards and neon accents
+### 1. 👤 User Search App (`user-app/`)
+Clean, elegant search interface for end users.
+- Beautiful landing page
+- Powerful AI-based image search
+- Icelandic language support
+- Responsive masonry grid layout
+- Image preview modal
 
-### Technical Highlights
-- **Dual Backend Architecture**
-  - Flask web server for search and UI
-  - FastAPI indexing service for job management
-- **Vector Database** - Qdrant for efficient similarity search
-- **Production Features**
-  - Audit logging and job history
-  - Configurable metadata fields
-  - Environment-driven settings
-  - CORS-enabled APIs
-  - Health check endpoints
+**Port:** Frontend (3000), API (5000)
 
-## 📋 Table of Contents
+### 2. ⚙️ Admin Management App (`admin-app/`)
+Powerful backend management for indexing operations.
+- Start new indexing jobs
+- Monitor job progress in real-time
+- Pause/resume/cancel jobs
+- View job history and logs
+- Analytics dashboard
 
-- [Architecture](#-architecture)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Configuration](#-configuration)
-- [Usage](#-usage)
-- [API Documentation](#-api-documentation)
-- [Development](#-development)
-- [Deployment](#-deployment)
+**Port:** Frontend (3001), API (8001)
 
-## 🏗️ Architecture
+---
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                     Frontend (React + Vite)                   │
-│  - Honeycomb landing page with 5 hexagonal feature cards     │
-│  - Search workspace with masonry grid results                │
-│  - Real-time indexing job management UI                      │
-└────────────────┬────────────────────────────┬────────────────┘
-                 │                            │
-        ┌────────▼────────┐          ┌────────▼─────────┐
-        │  Flask Backend  │          │ FastAPI Indexing │
-        │    (Port 5000)  │          │   Service (8001) │
-        │                 │          │                  │
-        │ - Semantic      │          │ - Job Manager    │
-        │   Search        │          │ - Progress Track │
-        │ - Icelandic     │          │ - Audit Logs     │
-        │ - Hybrid Search │          │ - Scheduling     │
-        └────────┬────────┘          └────────┬─────────┘
-                 │                            │
-                 └────────────┬───────────────┘
-                              │
-                   ┌──────────▼──────────┐
-                   │  CLIP ViT-B-32      │
-                   │  (OpenCLIP)         │
-                   │  512-dim embeddings │
-                   └──────────┬──────────┘
-                              │
-                   ┌──────────▼──────────┐
-                   │  Qdrant Vector DB   │
-                   │  Cosine similarity  │
-                   │  Local storage      │
-                   └─────────────────────┘
-```
-
-## 🚀 Installation
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Python 3.9+** with pip
-- **Node.js 18+** with npm
-- **Git**
-- **CUDA** (optional, for GPU acceleration)
+- Python 3.8+
+- Node.js 16+
+- pip and npm
 
-### Backend Setup
+### Installation
 
-1. **Clone the repository**
+1. **Clone the repository:**
 ```bash
 git clone <repository-url>
 cd saga-reykjav-kur-vefur
 ```
 
-2. **Create Python virtual environment**
+2. **Set up User Search App:**
 ```bash
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
+cd user-app
 
-3. **Install Python dependencies**
-```bash
+# Backend
+cd backend
 pip install -r requirements.txt
-```
+cp ../.env.example .env
+cd ..
 
-4. **Configure environment variables**
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-### Frontend Setup
-
-1. **Navigate to frontend directory**
-```bash
+# Frontend
 cd frontend
-```
-
-2. **Install Node dependencies**
-```bash
 npm install
+cd ..
 ```
 
-3. **Configure frontend environment**
+3. **Set up Admin App:**
 ```bash
-# Create frontend/.env.local
-echo "VITE_API_BASE_URL=http://localhost:5000" > .env.local
-echo "VITE_INDEXING_API_BASE_URL=http://localhost:8001" >> .env.local
-```
+cd ../admin-app
 
-## ⚡ Quick Start
-
-### Run All Services
-
-**Terminal 1 - Flask Backend:**
-```bash
-source venv/bin/activate
-python app_enhanced.py
-```
-
-**Terminal 2 - Indexing Service:**
-```bash
-source venv/bin/activate
-cd indexing_service
-uvicorn main:app --host 0.0.0.0 --port 8001
-```
-
-**Terminal 3 - React Frontend:**
-```bash
+# Frontend
 cd frontend
-npm run dev
+npm install
+cp ../.env.example .env
+cd ..
+
+# Backend (Indexing Service)
+cd ../indexing_service
+pip install -r requirements.txt
+cd ..
 ```
 
-Access the application at `http://localhost:3000`
+### Running the Applications
 
-## ⚙️ Configuration
-
-See `.env.example` for all available configuration options. Key settings:
-
-```env
-# Flask
-FLASK_HOST=0.0.0.0
-FLASK_PORT=5000
-
-# CLIP Model
-CLIP_MODEL=ViT-B-32
-CLIP_DEVICE=auto  # auto, cuda, cpu
-
-# Qdrant
-QDRANT_STORAGE_PATH=./qdrant_storage
-QDRANT_COLLECTION_NAME=image_search
-
-# Icelandic Support
-ENABLE_ICELANDIC_TRANSLATION=true
-
-# Search
-DEFAULT_SEARCH_LIMIT=50
-TEXT_SEARCH_WEIGHT=0.7
-METADATA_SEARCH_WEIGHT=0.3
-```
-
-## 📖 Usage
-
-### Indexing Images
-
-#### Via UI
-1. Navigate to `/workspace`
-2. Click "Indexing" tab
-3. Enter folder path
-4. Click "Start Indexing Job"
-
-#### Via API
+#### User Search App
 ```bash
-curl -X POST http://localhost:5000/api/index \
-  -H "Content-Type: application/json" \
-  -d '{"folder": "./scraped_images"}'
+cd user-app
+./start.sh
 ```
+Then open: http://localhost:3000
 
-### Searching Images
-
-#### Semantic Search
+#### Admin Management App
 ```bash
-curl -X POST http://localhost:5000/api/search \
-  -H "Content-Type: application/json" \
-  -d '{"query": "old buildings", "limit": 20}'
+cd admin-app
+./start.sh
 ```
-
-#### Icelandic Search
-```bash
-curl -X POST http://localhost:5000/api/search/icelandic \
-  -H "Content-Type: application/json" \
-  -d '{"query": "gamlar byggingar", "limit": 20}'
-```
-
-#### Hybrid Search
-```bash
-curl -X POST http://localhost:5000/api/search/hybrid \
-  -H "Content-Type: application/json" \
-  -d '{
-    "text_query": "harbor scene",
-    "metadata_filter": {"folder": "/path/to/collection"},
-    "weights": {"text": 0.7, "metadata": 0.3}
-  }'
-```
-
-## 📚 API Documentation
-
-### Flask Backend (Port 5000)
-
-- **POST /api/search** - Semantic search
-- **POST /api/search/icelandic** - Icelandic language support
-- **POST /api/search/hybrid** - Hybrid text + metadata search
-- **POST /api/index** - Start indexing
-- **GET /api/index/status** - Get indexing progress
-- **GET /api/stats** - Database statistics
-- **GET /api/health** - Health check
-
-### Indexing Service (Port 8001)
-
-- **POST /jobs/start** - Create indexing job
-- **GET /jobs/{id}/status** - Get job status
-- **POST /jobs/{id}/pause** - Pause job
-- **POST /jobs/{id}/resume** - Resume job
-- **POST /jobs/{id}/cancel** - Cancel job
-- **GET /jobs/{id}/logs** - Get job logs
-- **GET /jobs/history** - Get audit history
-
-## 🛠️ Development
-
-### Frontend Development
-```bash
-cd frontend
-npm run dev     # Start dev server
-npm run build   # Build for production
-npm run preview # Preview build
-```
-
-### Backend Development
-```bash
-export FLASK_DEBUG=true
-python app_enhanced.py
-
-# Indexing Service with auto-reload
-cd indexing_service
-uvicorn main:app --reload --port 8001
-```
-
-## 📝 Customization
-
-### Theme Variables
-Edit `frontend/src/styles/theme.css`:
-```css
-:root {
-  --color-accent-cyan: #5ac8fa;
-  --color-accent-purple: #af52de;
-  --hexagon-size: 180px;
-}
-```
-
-### Icons
-Replace icons in `frontend/src/components/icons/IconPlaceholders.jsx`
-
-### Logo
-Update logo in `HomePage.jsx` footer section
-
-## 🐛 Troubleshooting
-
-**CUDA Out of Memory**
-- Set `CLIP_DEVICE=cpu` in `.env`
-
-**Translation Errors**
-- Set `TRANSLATION_FALLBACK=true`
-- Or disable: `ENABLE_ICELANDIC_TRANSLATION=false`
-
-**Port Conflicts**
-- Change `FLASK_PORT` and `INDEXING_SERVICE_PORT` in `.env`
-
-## 📄 License
-
-MIT License
-
-## 🙏 Acknowledgments
-
-- OpenCLIP - CLIP model implementation
-- Qdrant - Vector database
-- React & Vite - Frontend framework
-- Flask & FastAPI - Backend frameworks
+Then open: http://localhost:3001
 
 ---
 
-Built with ❤️ for preserving Icelandic visual history
+## 🏗️ Architecture
+
+```
+┌──────────────────────────────────────────────────────────────┐
+│                    SAGA Reykjavík System                      │
+└──────────────────────────────────────────────────────────────┘
+
+┌─────────────────────────┐    ┌─────────────────────────┐
+│   User Search App       │    │   Admin Management App  │
+│   (Port 3000)           │    │   (Port 3001)           │
+│                         │    │                         │
+│  ┌──────────────────┐  │    │  ┌──────────────────┐  │
+│  │  Landing Page    │  │    │  │  Dashboard       │  │
+│  │  Search Page     │  │    │  │  Start Indexing  │  │
+│  │  Results Grid    │  │    │  │  View Jobs       │  │
+│  │  Image Modal     │  │    │  │  Job Controls    │  │
+│  └──────────────────┘  │    │  └──────────────────┘  │
+└────────────┬────────────┘    └────────────┬───────────┘
+             │                              │
+             ↓                              ↓
+    ┌────────────────┐           ┌────────────────────┐
+    │ Flask Search   │           │ FastAPI Indexing   │
+    │ API (5000)     │           │ Service (8001)     │
+    │                │           │                    │
+    │ - Search       │           │ - Job Management   │
+    │ - Stats        │           │ - Progress Track   │
+    │ - Images       │           │ - Pause/Resume     │
+    └────────┬───────┘           └─────────┬──────────┘
+             │                             │
+             │                             │
+             └─────────────┬───────────────┘
+                           ↓
+                  ┌─────────────────┐
+                  │  Qdrant Vector  │
+                  │    Database     │
+                  │ (Image Vectors) │
+                  └─────────────────┘
+```
+
+---
+
+## 🎨 Features
+
+### User Search App
+- ✨ **Glassmorphic UI** - Beautiful iOS-inspired design
+- 🔍 **AI Search** - CLIP-powered semantic search
+- 🇮🇸 **Icelandic Support** - Automatic translation
+- 🎯 **Smart Filters** - Adjust result count and minimum score
+- 📱 **Responsive** - Works on all devices
+- ⚡ **Fast** - Optimized with lazy loading
+
+### Admin Management App
+- 📤 **Easy Indexing** - Simple folder selection
+- 📊 **Real-time Monitoring** - Live progress tracking
+- 🎛️ **Job Control** - Pause, resume, cancel operations
+- 📈 **Analytics** - View indexing statistics
+- 🔄 **Auto-refresh** - Real-time updates
+- 🎨 **Beautiful Dashboard** - Clean, modern interface
+
+---
+
+## 📂 Project Structure
+
+```
+saga-reykjav-kur-vefur/
+├── user-app/                    # User-facing search application
+│   ├── frontend/                # React frontend
+│   │   ├── src/
+│   │   │   ├── pages/          # Landing, Search
+│   │   │   ├── components/     # ImageGrid, ImageModal
+│   │   │   ├── services/       # API client
+│   │   │   └── styles/         # Glassmorphism CSS
+│   │   └── package.json
+│   ├── backend/                 # Flask search API
+│   │   ├── app.py
+│   │   └── requirements.txt
+│   ├── start.sh
+│   └── README.md
+│
+├── admin-app/                   # Admin management application
+│   ├── frontend/                # React admin UI
+│   │   ├── src/
+│   │   │   ├── pages/          # Dashboard, Indexing, Jobs
+│   │   │   ├── components/     # JobCard
+│   │   │   ├── services/       # Job API client
+│   │   │   └── styles/         # Glassmorphism CSS
+│   │   └── package.json
+│   ├── start.sh
+│   └── README.md
+│
+├── indexing_service/            # FastAPI indexing service
+│   ├── main.py
+│   ├── api/routes.py
+│   ├── services/
+│   │   ├── indexer.py          # Image processing
+│   │   └── job_manager.py      # Job orchestration
+│   └── models/job.py
+│
+├── qdrant_storage/              # Vector database storage
+│
+└── README.md                    # This file
+```
+
+---
+
+## 🔧 Configuration
+
+### User App Environment (user-app/.env)
+```env
+FLASK_PORT=5000
+CORS_ORIGINS=http://localhost:3000
+CLIP_MODEL=ViT-B-32
+QDRANT_STORAGE_PATH=../qdrant_storage
+ENABLE_ICELANDIC_TRANSLATION=true
+```
+
+### Admin App Environment (admin-app/.env)
+```env
+VITE_API_URL=http://localhost:8001
+```
+
+### Indexing Service (indexing_service/.env)
+```env
+SERVICE_PORT=8001
+CLIP_MODEL=ViT-B-32
+QDRANT_STORAGE_PATH=../qdrant_storage
+MAX_CONCURRENT_JOBS=3
+```
+
+---
+
+## 🛠️ Technologies
+
+### Frontend
+- **Framework:** React 18
+- **Build Tool:** Vite
+- **Routing:** React Router v6
+- **Animations:** Framer Motion
+- **HTTP Client:** Axios
+- **Grid Layout:** React Masonry CSS
+
+### Backend
+- **Search API:** Flask
+- **Indexing Service:** FastAPI
+- **AI Model:** OpenAI CLIP (ViT-B-32)
+- **Vector DB:** Qdrant
+- **Deep Learning:** PyTorch
+- **Translation:** Deep Translator
+
+### Design
+- **Style:** Custom iOS Glassmorphism
+- **Fonts:** SF Pro Display (system fonts)
+- **Colors:** Dynamic gradients with floating orbs
+- **Effects:** Backdrop blur, glass borders
+
+---
+
+## 📖 Usage
+
+### For End Users (Search App)
+
+1. Open http://localhost:3000
+2. Click "Hefja leit" (Start Search)
+3. Enter your search query in Icelandic or English
+4. Adjust filters if needed
+5. Click "Leita" (Search)
+6. Browse beautiful masonry grid results
+7. Click any image to view details
+
+### For Administrators (Admin App)
+
+1. Open http://localhost:3001
+2. Click "Start Indexing"
+3. Enter full path to image folder
+4. Configure indexing options
+5. Click "Start Indexing"
+6. Monitor progress in "View Jobs"
+7. Pause/resume/cancel as needed
+
+---
+
+## 🔍 API Documentation
+
+### User Search API (Port 5000)
+
+#### Search Images
+```http
+POST /api/search
+Content-Type: application/json
+
+{
+  "query": "gamlar byggingar",
+  "limit": 50,
+  "min_score": 0.2
+}
+```
+
+#### Search with Icelandic
+```http
+POST /api/search/icelandic
+Content-Type: application/json
+
+{
+  "query": "gamlar byggingar",
+  "limit": 50,
+  "min_score": 0.2
+}
+```
+
+### Admin Indexing API (Port 8001)
+
+#### Start Job
+```http
+POST /jobs/start
+Content-Type: application/json
+
+{
+  "image_folder": "C:\\Users\\user\\images",
+  "options": {
+    "recursive": true,
+    "skip_existing": true,
+    "batch_size": 100
+  }
+}
+```
+
+#### Get Job Status
+```http
+GET /jobs/{job_id}/status
+```
+
+#### Pause Job
+```http
+POST /jobs/{job_id}/pause
+```
+
+---
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test both applications
+5. Submit a pull request
+
+---
+
+## 📝 License
+
+SAGA Reykjavík © 2025
+
+---
+
+## 🎉 Credits
+
+Built with ❤️ using:
+- [CLIP](https://github.com/openai/CLIP) by OpenAI
+- [Qdrant](https://qdrant.tech/) Vector Database
+- [React](https://react.dev/) & [Vite](https://vitejs.dev/)
+- [Flask](https://flask.palletsprojects.com/) & [FastAPI](https://fastapi.tiangolo.com/)
+
+---
+
+## 📧 Support
+
+For issues or questions, please open an issue on GitHub.
+
+**Enjoy your beautiful, elegant image search system!** ✨

@@ -1,0 +1,144 @@
+.dashboard-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.dashboard-content {
+  max-width: 1000px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.dashboard-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-badge {
+  width: 80px;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 24px;
+}
+
+.dashboard-title {
+  font-size: 56px;
+  font-weight: 700;
+  letter-spacing: -1px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.dashboard-subtitle {
+  font-size: 20px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+.dashboard-card {
+  padding: 40px 32px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  position: relative;
+  overflow: hidden;
+}
+
+.dashboard-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    transparent 100%
+  );
+  pointer-events: none;
+}
+
+.card-icon {
+  font-size: 64px;
+  line-height: 1;
+}
+
+.card-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.card-description {
+  font-size: 16px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.card-arrow {
+  margin-top: 8px;
+  color: var(--text-primary);
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+}
+
+.dashboard-card:hover .card-arrow {
+  transform: translateX(8px);
+}
+
+.info-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px 28px;
+}
+
+.info-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.info-content h4 {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0 0 8px 0;
+}
+
+.info-content p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .dashboard-title {
+    font-size: 40px;
+  }
+
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
