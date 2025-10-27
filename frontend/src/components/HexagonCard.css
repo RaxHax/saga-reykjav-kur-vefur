@@ -1,0 +1,189 @@
+/* =============================================================================
+   HEXAGON CARD COMPONENT STYLES
+   ============================================================================= */
+
+.hexagon-card-wrapper {
+  position: relative;
+  width: var(--hexagon-size);
+  height: var(--hexagon-size);
+  cursor: pointer;
+  perspective: 1000px;
+}
+
+.hexagon-card {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(15, 15, 26, 0.4);
+  border-radius: var(--hexagon-border-radius);
+  transition: all var(--transition-base);
+  overflow: hidden;
+}
+
+/* Hexagon Border SVG */
+.hexagon-border {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  transition: opacity var(--transition-base);
+}
+
+.hexagon-card:hover .hexagon-border {
+  opacity: 1;
+}
+
+.hexagon-path {
+  filter: drop-shadow(0 0 8px var(--glow-color));
+  transition: all var(--transition-base);
+}
+
+.hexagon-card:hover .hexagon-path {
+  stroke-width: 0.8;
+  filter: drop-shadow(0 0 16px var(--glow-color));
+}
+
+/* Card Content */
+.hexagon-content {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: var(--space-4);
+  gap: var(--space-3);
+  width: 100%;
+  height: 100%;
+}
+
+/* Icon Container */
+.icon-container {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-color);
+  transition: all var(--transition-base);
+}
+
+.hexagon-card:hover .icon-container {
+  filter: drop-shadow(0 0 12px var(--glow-color));
+}
+
+.icon-container svg {
+  width: 100%;
+  height: 100%;
+}
+
+/* Title */
+.card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  transition: color var(--transition-fast);
+}
+
+.hexagon-card:hover .card-title {
+  color: var(--accent-color);
+}
+
+/* Description */
+.card-description {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin: 0;
+  line-height: var(--line-height-normal);
+  max-width: 140px;
+  transition: color var(--transition-fast);
+}
+
+.hexagon-card:hover .card-description {
+  color: var(--color-text-secondary);
+}
+
+/* Hover Arrow */
+.hover-arrow {
+  position: absolute;
+  bottom: var(--space-4);
+  right: var(--space-4);
+  color: var(--accent-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Glow Effect Background */
+.hexagon-glow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at center,
+    var(--glow-color) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--transition-slow);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.hexagon-card:hover .hexagon-glow {
+  opacity: 0.4;
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% {
+    transform: scale(0.9);
+    opacity: 0.4;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 0.6;
+  }
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .icon-container {
+    width: 40px;
+    height: 40px;
+  }
+
+  .card-title {
+    font-size: var(--font-size-base);
+  }
+
+  .card-description {
+    font-size: var(--font-size-xs);
+    max-width: 120px;
+  }
+}
+
+@media (max-width: 480px) {
+  .icon-container {
+    width: 32px;
+    height: 32px;
+  }
+
+  .card-title {
+    font-size: var(--font-size-sm);
+  }
+
+  .card-description {
+    display: none; /* Hide description on very small screens */
+  }
+
+  .hover-arrow {
+    bottom: var(--space-2);
+    right: var(--space-2);
+  }
+}
