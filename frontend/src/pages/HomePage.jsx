@@ -214,6 +214,32 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* Floating Bottom-Right Logo */}
+      <motion.div
+        className="floating-logo"
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5, delay: 1.5 }}
+      >
+        <div className="logo-mark-floating">
+          <svg width="64" height="64" viewBox="0 0 48 48" fill="none">
+            <circle cx="24" cy="24" r="20" stroke="url(#logo-gradient-floating)" strokeWidth="2" />
+            <path
+              d="M24 12L30 24L24 36L18 24L24 12Z"
+              fill="url(#logo-gradient-floating)"
+              opacity="0.6"
+            />
+            <defs>
+              <linearGradient id="logo-gradient-floating" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#5ac8fa" />
+                <stop offset="100%" stopColor="#af52de" />
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div className="logo-tooltip">SAGA Reykjavík</div>
+      </motion.div>
+
       {/* Footer with Logo */}
       <footer className="main-footer">
         <div className="container">
