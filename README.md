@@ -76,6 +76,8 @@ A production-ready, AI-powered semantic image search platform designed for Icela
 
 ## 🚀 Installation
 
+> **🪟 Windows Users:** See the [Windows Setup Guide](WINDOWS_SETUP.md) for batch scripts and step-by-step instructions.
+
 ### Prerequisites
 
 - **Python 3.9+** with pip
@@ -129,7 +131,26 @@ echo "VITE_INDEXING_API_BASE_URL=http://localhost:8001" >> .env.local
 
 ## ⚡ Quick Start
 
-### Run All Services
+### Windows (3 Steps)
+
+1. **Setup (first time only):**
+   ```cmd
+   setup.bat
+   ```
+
+2. **Start application:**
+   ```cmd
+   start.bat
+   ```
+   Three windows will open automatically for each service.
+
+3. **Access:** Browser opens automatically to `http://localhost:5173`
+
+**Stop:** Close the service windows or run `stop.bat`
+
+See [Windows Setup Guide](WINDOWS_SETUP.md) for details.
+
+### Linux/Mac
 
 **Terminal 1 - Flask Backend:**
 ```bash
@@ -150,7 +171,7 @@ cd frontend
 npm run dev
 ```
 
-Access the application at `http://localhost:3000`
+Access the application at `http://localhost:5173`
 
 ## ⚙️ Configuration
 
