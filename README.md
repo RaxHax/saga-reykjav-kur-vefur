@@ -264,6 +264,38 @@ cd indexing_service
 uvicorn main:app --reload --port 8001
 ```
 
+## 🧪 Testing & Demo
+
+### Quick API Test
+Run a quick health check on all endpoints:
+```bash
+./quick_test.sh
+```
+
+### Comprehensive Feature Demo
+Interactive demo showcasing all platform features:
+```bash
+python demo_all_features.py --demo-data-path ./your_images
+```
+
+This demo will:
+1. Check service health
+2. Display database statistics
+3. Start and monitor indexing jobs
+4. Test semantic search (English)
+5. Test Icelandic search with translation
+6. Test hybrid search with metadata filters
+7. Demonstrate job management (pause/resume/cancel)
+
+### Unit Tests
+```bash
+# Backend tests
+pytest tests/
+
+# Frontend tests
+cd frontend && npm test
+```
+
 ## 📝 Customization
 
 ### Theme Variables
@@ -272,15 +304,95 @@ Edit `frontend/src/styles/theme.css`:
 :root {
   --color-accent-cyan: #5ac8fa;
   --color-accent-purple: #af52de;
+  --color-accent-green: #7bffa7;
   --hexagon-size: 180px;
+  --gradient-cyan-purple: linear-gradient(135deg, #5ac8fa 0%, #af52de 100%);
 }
 ```
 
-### Icons
-Replace icons in `frontend/src/components/icons/IconPlaceholders.jsx`
+### Configurable Icons
+Icons are designed as placeholders that can be easily swapped.
+Edit `frontend/src/components/icons/IconPlaceholders.jsx`:
+```jsx
+export const SearchIcon = () => (
+  <svg viewBox="0 0 48 48" fill="none">
+    {/* Replace with your custom SVG paths */}
+  </svg>
+)
+```
 
-### Logo
-Update logo in `HomePage.jsx` footer section
+Available icons:
+- `SearchIcon` - AI search with sparkle
+- `ProjectsIcon` - Stacked layers
+- `ArchiveIcon` - Folder with document
+- `IndexIcon` - Database layers
+- `AnalyticsIcon` - Bar chart with trend
+- `SettingsIcon` - Gear
+- `VectorIcon` - Neural network
+- `UploadIcon` - Cloud upload
+
+### Logo Customization
+The logo appears in three locations:
+1. **Floating logo** (bottom-right) - `HomePage.jsx` line 218-241
+2. **Footer logo** - `HomePage.jsx` line 244-276
+3. **Workspace logo** - `WorkspacePage.jsx` sidebar
+
+Replace the SVG in these locations to update branding.
+
+## 📁 Project Structure
+
+```
+saga-reykjav-kur-vefur/
+├── app.py                          # Basic Flask backend
+├── app_enhanced.py                 # Enhanced Flask with Icelandic support
+├── requirements.txt                # Python dependencies
+├── .env.example                    # Environment configuration template
+├── demo_all_features.py            # Comprehensive feature demo
+├── quick_test.sh                   # Quick API health check
+├── start-all-services.sh           # Service orchestration
+├── stop-all-services.sh            # Service shutdown
+│
+├── indexing_service/               # FastAPI indexing microservice
+│   ├── main.py                     # FastAPI app entry point
+│   ├── README.md                   # Indexing service documentation
+│   ├── models/                     # Pydantic data models
+│   ├── services/                   # Business logic
+│   │   ├── indexer.py              # CLIP embedding & Qdrant
+│   │   └── job_manager.py          # Job lifecycle management
+│   ├── api/                        # API routes
+│   └── utils/                      # Utilities & logging
+│
+├── frontend/                       # React + Vite application
+│   ├── src/
+│   │   ├── pages/
+│   │   │   ├── HomePage.jsx        # Landing with honeycomb cards
+│   │   │   ├── WorkspacePage.jsx   # Search & indexing workspace
+│   │   │   └── ProjectsPage.jsx    # Projects hub (placeholder)
+│   │   ├── components/
+│   │   │   ├── SearchPanel.jsx
+│   │   │   ├── IndexingPanel.jsx
+│   │   │   ├── HoneycombGrid.jsx   # 5-card honeycomb layout
+│   │   │   ├── HexagonCard.jsx     # Individual hex card
+│   │   │   └── icons/
+│   │   │       └── IconPlaceholders.jsx  # Configurable icons
+│   │   ├── services/
+│   │   │   └── api.js              # API client
+│   │   └── styles/
+│   │       ├── theme.css           # Dark-tech theme system
+│   │       └── global.css          # Global styles
+│   ├── package.json
+│   ├── vite.config.js
+│   └── README.md                   # Frontend documentation
+│
+├── tests/                          # Test suite
+│   └── test_all_features.py
+│
+└── qdrant_storage/                 # Vector database storage
+```
+
+For detailed component documentation, see:
+- [Indexing Service Documentation](./indexing_service/README.md)
+- [Frontend Documentation](./frontend/README.md)
 
 ## 🐛 Troubleshooting
 
