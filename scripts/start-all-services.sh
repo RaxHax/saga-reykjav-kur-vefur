@@ -23,6 +23,9 @@ BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
 NC='\033[0m' # No Color
 
+# Change to project root directory
+cd "$(dirname "$0")/.."
+
 # Check if .env exists
 if [ ! -f .env ]; then
     echo -e "${YELLOW}⚠️  No .env file found. Creating from template...${NC}"
@@ -65,8 +68,10 @@ echo ""
 
 # Start Flask backend in background
 echo -e "${BLUE}1. Starting Flask backend (port 5000)...${NC}"
-python app_enhanced.py > logs/flask.log 2>&1 &
+cd backend/flask_api
+python app.py > ../../logs/flask.log 2>&1 &
 FLASK_PID=$!
+cd ../..
 echo -e "${GREEN}   ✅ Flask started (PID: $FLASK_PID)${NC}"
 
 # Wait a bit for Flask to start
@@ -74,10 +79,10 @@ sleep 2
 
 # Start Indexing service in background
 echo -e "${BLUE}2. Starting Indexing service (port 8001)...${NC}"
-cd indexing_service
-uvicorn main:app --host 0.0.0.0 --port 8001 > ../logs/indexing.log 2>&1 &
+cd backend/indexing_service
+uvicorn main:app --host 0.0.0.0 --port 8001 > ../../logs/indexing.log 2>&1 &
 INDEXING_PID=$!
-cd ..
+cd ../..
 echo -e "${GREEN}   ✅ Indexing service started (PID: $INDEXING_PID)${NC}"
 
 # Wait a bit for indexing service to start

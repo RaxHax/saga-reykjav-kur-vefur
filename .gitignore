@@ -82,3 +82,6 @@ dump.rdb
 *.orig
 .temp/
 temp/
+
+# Service management
+.pids

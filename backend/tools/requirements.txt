@@ -1,0 +1,7 @@
+# Tools and Utilities Requirements
+selenium>=4.15.0
+webdriver-manager>=4.0.0
+requests>=2.31.0
+
+# For demo script
+# Uses all backend dependencies from root requirements.txt

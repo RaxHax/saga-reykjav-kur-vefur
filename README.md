@@ -1,89 +1,77 @@
-# SAGA Reykjavík - Modern Visual Search Platform
+# SAGA Reykjavík - Image Search Platform
 
-A production-ready, AI-powered semantic image search platform designed for Icelandic visual archives. Features include dark-tech UI with hexagonal honeycomb design, Icelandic language support, hybrid search capabilities, and dedicated job management services.
+Modern semantic image search platform powered by CLIP (Contrastive Language-Image Pre-training) and vector similarity search. Search images using natural language, with support for Icelandic translation and hybrid metadata filtering.
 
-![Version](https://img.shields.io/badge/version-2.0.0-blue)
-![Python](https://img.shields.io/badge/python-3.9+-green)
-![Node](https://img.shields.io/badge/node-18+-green)
-![License](https://img.shields.io/badge/license-MIT-blue)
+## ✨ Features
 
-## 🌟 Features
-
-### Core Capabilities
-- **Semantic Image Search** - CLIP-powered visual search using natural language queries
-- **Icelandic Language Support** - Automatic translation for Icelandic queries with fallback
-- **Hybrid Search** - Combine text semantics with metadata filters for precision
-- **Real-time Indexing** - Background job processing with progress tracking
-- **Modern React UI** - Dark-tech design with honeycomb feature cards and neon accents
-
-### Technical Highlights
-- **Dual Backend Architecture**
-  - Flask web server for search and UI
-  - FastAPI indexing service for job management
-- **Vector Database** - Qdrant for efficient similarity search
-- **Production Features**
-  - Audit logging and job history
-  - Configurable metadata fields
-  - Environment-driven settings
-  - CORS-enabled APIs
-  - Health check endpoints
-
-## 📋 Table of Contents
-
-- [Architecture](#-architecture)
-- [Installation](#-installation)
-- [Quick Start](#-quick-start)
-- [Configuration](#-configuration)
-- [Usage](#-usage)
-- [API Documentation](#-api-documentation)
-- [Development](#-development)
-- [Deployment](#-deployment)
+- 🔍 **Semantic Search** - Search images using natural language descriptions
+- 🇮🇸 **Icelandic Support** - Automatic translation from Icelandic to English
+- 🎯 **Hybrid Search** - Combine text search with metadata filters
+- ⚡ **Fast Indexing** - Asynchronous batch image processing
+- 📊 **Real-time Progress** - Track indexing jobs with live updates
+- 🎨 **Modern UI** - Beautiful React interface with honeycomb navigation
+- 🔄 **Job Management** - Pause, resume, and cancel indexing operations
+- 📈 **Statistics** - Database insights and search analytics
 
 ## 🏗️ Architecture
 
+This project uses a clean, modular microservices architecture:
+
 ```
-┌─────────────────────────────────────────────────────────────┐
-│                     Frontend (React + Vite)                   │
-│  - Honeycomb landing page with 5 hexagonal feature cards     │
-│  - Search workspace with masonry grid results                │
-│  - Real-time indexing job management UI                      │
-└────────────────┬────────────────────────────┬────────────────┘
-                 │                            │
-        ┌────────▼────────┐          ┌────────▼─────────┐
-        │  Flask Backend  │          │ FastAPI Indexing │
-        │    (Port 5000)  │          │   Service (8001) │
-        │                 │          │                  │
-        │ - Semantic      │          │ - Job Manager    │
-        │   Search        │          │ - Progress Track │
-        │ - Icelandic     │          │ - Audit Logs     │
-        │ - Hybrid Search │          │ - Scheduling     │
-        └────────┬────────┘          └────────┬─────────┘
-                 │                            │
-                 └────────────┬───────────────┘
-                              │
-                   ┌──────────▼──────────┐
-                   │  CLIP ViT-B-32      │
-                   │  (OpenCLIP)         │
-                   │  512-dim embeddings │
-                   └──────────┬──────────┘
-                              │
-                   ┌──────────▼──────────┐
-                   │  Qdrant Vector DB   │
-                   │  Cosine similarity  │
-                   │  Local storage      │
-                   └─────────────────────┘
+┌─────────────────┐      ┌──────────────────┐      ┌─────────────────┐
+│  React Frontend │ ───▶ │   Flask API      │ ───▶ │  CLIP + Qdrant  │
+│  (Port 3000)    │      │   (Port 5000)    │      │  Vector Search  │
+└─────────────────┘      └──────────────────┘      └─────────────────┘
+                                 │
+                                 │
+                         ┌───────▼──────────┐
+                         │ Indexing Service │
+                         │   (Port 8001)    │
+                         └──────────────────┘
 ```
 
-## 🚀 Installation
+### Directory Structure
+
+```
+saga-reykjav-kur-vefur/
+├── backend/                    # All backend services
+│   ├── flask_api/              # REST API service
+│   │   ├── app.py              # Main application
+│   │   ├── routes/             # API endpoints by function
+│   │   └── services/           # Business logic layer
+│   ├── indexing_service/       # FastAPI indexing microservice
+│   │   ├── main.py             # FastAPI application
+│   │   ├── api/                # API routes
+│   │   └── services/           # Job management & indexing
+│   ├── shared/                 # Shared utilities (singletons)
+│   │   ├── config.py           # Centralized configuration
+│   │   ├── logger.py           # Logging setup
+│   │   ├── clip_manager.py     # CLIP model singleton
+│   │   └── qdrant_manager.py   # Qdrant client singleton
+│   ├── tools/                  # Utility scripts
+│   └── tests/                  # Backend tests
+├── frontend/                   # React application
+│   └── src/
+│       ├── pages/              # Page components
+│       ├── components/         # Reusable UI components
+│       ├── services/           # API clients
+│       └── styles/             # Styling
+├── scripts/                    # Service management scripts
+├── docs/                       # Documentation
+├── templates/                  # Jinja2 templates (for Flask)
+└── static/                     # Static assets
+```
+
+## 🚀 Quick Start
 
 ### Prerequisites
 
-- **Python 3.9+** with pip
-- **Node.js 18+** with npm
-- **Git**
-- **CUDA** (optional, for GPU acceleration)
+- Python 3.10+
+- Node.js 18+
+- 4GB+ RAM (8GB recommended for GPU)
+- Optional: CUDA-capable GPU for faster processing
 
-### Backend Setup
+### Installation
 
 1. **Clone the repository**
 ```bash
@@ -91,332 +79,242 @@ git clone <repository-url>
 cd saga-reykjav-kur-vefur
 ```
 
-2. **Create Python virtual environment**
+2. **Setup Python environment**
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
-```
-
-3. **Install Python dependencies**
-```bash
 pip install -r requirements.txt
 ```
 
-4. **Configure environment variables**
-```bash
-cp .env.example .env
-# Edit .env with your configuration
-```
-
-### Frontend Setup
-
-1. **Navigate to frontend directory**
+3. **Setup Frontend**
 ```bash
 cd frontend
-```
-
-2. **Install Node dependencies**
-```bash
 npm install
+cd ..
 ```
 
-3. **Configure frontend environment**
+4. **Configure environment**
 ```bash
-# Create frontend/.env.local
-echo "VITE_API_BASE_URL=http://localhost:5000" > .env.local
-echo "VITE_INDEXING_API_BASE_URL=http://localhost:8001" >> .env.local
+cp .env.example .env
+# Edit .env with your settings
 ```
 
-## ⚡ Quick Start
+### Running the Application
 
-### Run All Services
-
-**Terminal 1 - Flask Backend:**
+**Option 1: Start all services at once (Recommended)**
 ```bash
-source venv/bin/activate
-python app_enhanced.py
+./scripts/start-all-services.sh
 ```
 
-**Terminal 2 - Indexing Service:**
+**Option 2: Start services individually**
+
+Terminal 1 - Flask API:
 ```bash
-source venv/bin/activate
-cd indexing_service
+cd backend/flask_api
+python app.py
+```
+
+Terminal 2 - Indexing Service:
+```bash
+cd backend/indexing_service
 uvicorn main:app --host 0.0.0.0 --port 8001
 ```
 
-**Terminal 3 - React Frontend:**
+Terminal 3 - Frontend:
 ```bash
 cd frontend
 npm run dev
 ```
 
-Access the application at `http://localhost:3000`
+### Access the Application
 
-## ⚙️ Configuration
-
-See `.env.example` for all available configuration options. Key settings:
-
-```env
-# Flask
-FLASK_HOST=0.0.0.0
-FLASK_PORT=5000
-
-# CLIP Model
-CLIP_MODEL=ViT-B-32
-CLIP_DEVICE=auto  # auto, cuda, cpu
-
-# Qdrant
-QDRANT_STORAGE_PATH=./qdrant_storage
-QDRANT_COLLECTION_NAME=image_search
-
-# Icelandic Support
-ENABLE_ICELANDIC_TRANSLATION=true
-
-# Search
-DEFAULT_SEARCH_LIMIT=50
-TEXT_SEARCH_WEIGHT=0.7
-METADATA_SEARCH_WEIGHT=0.3
-```
+- **Frontend**: http://localhost:3000
+- **Flask API**: http://localhost:5000
+- **Indexing API**: http://localhost:8001
+- **API Docs**: http://localhost:8001/docs
 
 ## 📖 Usage
 
-### Indexing Images
+### 1. Index Your Images
 
-#### Via UI
-1. Navigate to `/workspace`
-2. Click "Indexing" tab
-3. Enter folder path
-4. Click "Start Indexing Job"
+1. Place images in a folder (default: `./scraped_images/`)
+2. Optionally add `.txt` files with same name as images for descriptions
+3. Navigate to the Workspace page
+4. Click "Start Indexing" in the Indexing Panel
+5. Monitor progress in real-time
 
-#### Via API
-```bash
-curl -X POST http://localhost:5000/api/index \
-  -H "Content-Type: application/json" \
-  -d '{"folder": "./scraped_images"}'
-```
+### 2. Search Images
 
-### Searching Images
+1. Enter a search query in natural language
+   - English: "sunset over mountains"
+   - Icelandic: "sólsetur yfir fjöllum" (automatically translated)
+2. View results ranked by semantic similarity
+3. Click images to view in fullscreen
 
-#### Semantic Search
-```bash
-curl -X POST http://localhost:5000/api/search \
-  -H "Content-Type: application/json" \
-  -d '{"query": "old buildings", "limit": 20}'
-```
+### 3. Advanced Search
 
-#### Icelandic Search
-```bash
-curl -X POST http://localhost:5000/api/search/icelandic \
-  -H "Content-Type: application/json" \
-  -d '{"query": "gamlar byggingar", "limit": 20}'
-```
+Use hybrid search to combine semantic search with metadata filters:
 
-#### Hybrid Search
 ```bash
 curl -X POST http://localhost:5000/api/search/hybrid \
   -H "Content-Type: application/json" \
   -d '{
-    "text_query": "harbor scene",
-    "metadata_filter": {"folder": "/path/to/collection"},
+    "text_query": "landscape",
+    "metadata_filter": {"folder": "/path/to/specific/folder"},
     "weights": {"text": 0.7, "metadata": 0.3}
   }'
 ```
 
-## 📚 API Documentation
+## 🔧 Configuration
 
-### Flask Backend (Port 5000)
+Key environment variables (`.env` file):
 
-- **POST /api/search** - Semantic search
-- **POST /api/search/icelandic** - Icelandic language support
-- **POST /api/search/hybrid** - Hybrid text + metadata search
-- **POST /api/index** - Start indexing
-- **GET /api/index/status** - Get indexing progress
-- **GET /api/stats** - Database statistics
-- **GET /api/health** - Health check
+### CLIP Model
+```env
+CLIP_MODEL=ViT-B-32
+CLIP_PRETRAINED=laion2b_s34b_b79k
+CLIP_DEVICE=auto  # auto, cpu, or cuda
+```
 
-### Indexing Service (Port 8001)
+### Services
+```env
+FLASK_PORT=5000
+INDEXING_SERVICE_PORT=8001
+```
 
-- **POST /jobs/start** - Create indexing job
-- **GET /jobs/{id}/status** - Get job status
-- **POST /jobs/{id}/pause** - Pause job
-- **POST /jobs/{id}/resume** - Resume job
-- **POST /jobs/{id}/cancel** - Cancel job
-- **GET /jobs/{id}/logs** - Get job logs
-- **GET /jobs/history** - Get audit history
+### Qdrant Database
+```env
+QDRANT_STORAGE_PATH=./qdrant_storage
+QDRANT_COLLECTION_NAME=image_search
+QDRANT_VECTOR_SIZE=512
+```
+
+### Search Settings
+```env
+DEFAULT_SEARCH_LIMIT=50
+MIN_SIMILARITY_SCORE=0.0
+```
+
+### Icelandic Support
+```env
+ENABLE_ICELANDIC_TRANSLATION=true
+```
+
+See `.env.example` for all available options.
+
+## 🧪 Testing
+
+Run backend tests:
+```bash
+cd backend/tests
+pytest
+```
+
+Run feature demo:
+```bash
+cd backend/tools
+python demo_all_features.py
+```
+
+## 📚 Documentation
+
+- **[Architecture Guide](docs/ARCHITECTURE.md)** - Detailed system design
+- **[Backend README](backend/README.md)** - Backend services overview
+- **[Flask API README](backend/flask_api/README.md)** - REST API documentation
+- **[Indexing Service README](backend/indexing_service/README.md)** - Indexing API docs
+- **[Frontend README](frontend/README.md)** - Frontend development guide
 
 ## 🛠️ Development
 
-### Frontend Development
+### Project Organization
+
+The codebase is organized for easy development:
+
+- **Work on search features**: Edit `backend/flask_api/`
+- **Work on indexing**: Edit `backend/indexing_service/`
+- **Work on UI**: Edit `frontend/src/`
+- **Add shared utilities**: Edit `backend/shared/`
+- **Update configuration**: Edit `backend/shared/config.py`
+
+### Adding New Features
+
+1. **New API endpoint**: Add route in `backend/flask_api/routes/`
+2. **New business logic**: Add service in `backend/flask_api/services/`
+3. **New UI component**: Add to `frontend/src/components/`
+4. **New page**: Add to `frontend/src/pages/`
+
+### Code Style
+
+- **Python**: PEP 8, use Black formatter
+- **JavaScript**: ESLint + Prettier
+- **Commits**: Conventional commits format
+
+## 🚢 Deployment
+
+### Docker Deployment
+
 ```bash
-cd frontend
-npm run dev     # Start dev server
-npm run build   # Build for production
-npm run preview # Preview build
+docker-compose up -d
 ```
 
-### Backend Development
-```bash
-export FLASK_DEBUG=true
-python app_enhanced.py
+### Production Checklist
 
-# Indexing Service with auto-reload
-cd indexing_service
-uvicorn main:app --reload --port 8001
-```
+- [ ] Set `FLASK_DEBUG=false`
+- [ ] Generate secure `FLASK_SECRET_KEY`
+- [ ] Configure `CORS_ORIGINS` for your domain
+- [ ] Set up HTTPS/TLS certificates
+- [ ] Configure reverse proxy (nginx)
+- [ ] Set up monitoring and logging
+- [ ] Enable database backups
+- [ ] Configure firewall rules
 
-## 🧪 Testing & Demo
+## 📊 Performance
 
-### Quick API Test
-Run a quick health check on all endpoints:
-```bash
-./quick_test.sh
-```
+- **Search latency**: < 100ms
+- **Indexing speed**: ~100 images/minute (CPU), ~500 images/minute (GPU)
+- **Memory usage**: ~2GB for CLIP model + ~500MB for Qdrant
+- **Storage**: ~2KB per indexed image
 
-### Comprehensive Feature Demo
-Interactive demo showcasing all platform features:
-```bash
-python demo_all_features.py --demo-data-path ./your_images
-```
+## 🤝 Contributing
 
-This demo will:
-1. Check service health
-2. Display database statistics
-3. Start and monitor indexing jobs
-4. Test semantic search (English)
-5. Test Icelandic search with translation
-6. Test hybrid search with metadata filters
-7. Demonstrate job management (pause/resume/cancel)
+Contributions are welcome! Please:
 
-### Unit Tests
-```bash
-# Backend tests
-pytest tests/
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Add tests for new features
+5. Update documentation
+6. Submit a pull request
 
-# Frontend tests
-cd frontend && npm test
-```
+## 📝 License
 
-## 📝 Customization
-
-### Theme Variables
-Edit `frontend/src/styles/theme.css`:
-```css
-:root {
-  --color-accent-cyan: #5ac8fa;
-  --color-accent-purple: #af52de;
-  --color-accent-green: #7bffa7;
-  --hexagon-size: 180px;
-  --gradient-cyan-purple: linear-gradient(135deg, #5ac8fa 0%, #af52de 100%);
-}
-```
-
-### Configurable Icons
-Icons are designed as placeholders that can be easily swapped.
-Edit `frontend/src/components/icons/IconPlaceholders.jsx`:
-```jsx
-export const SearchIcon = () => (
-  <svg viewBox="0 0 48 48" fill="none">
-    {/* Replace with your custom SVG paths */}
-  </svg>
-)
-```
-
-Available icons:
-- `SearchIcon` - AI search with sparkle
-- `ProjectsIcon` - Stacked layers
-- `ArchiveIcon` - Folder with document
-- `IndexIcon` - Database layers
-- `AnalyticsIcon` - Bar chart with trend
-- `SettingsIcon` - Gear
-- `VectorIcon` - Neural network
-- `UploadIcon` - Cloud upload
-
-### Logo Customization
-The logo appears in three locations:
-1. **Floating logo** (bottom-right) - `HomePage.jsx` line 218-241
-2. **Footer logo** - `HomePage.jsx` line 244-276
-3. **Workspace logo** - `WorkspacePage.jsx` sidebar
-
-Replace the SVG in these locations to update branding.
-
-## 📁 Project Structure
-
-```
-saga-reykjav-kur-vefur/
-├── app.py                          # Basic Flask backend
-├── app_enhanced.py                 # Enhanced Flask with Icelandic support
-├── requirements.txt                # Python dependencies
-├── .env.example                    # Environment configuration template
-├── demo_all_features.py            # Comprehensive feature demo
-├── quick_test.sh                   # Quick API health check
-├── start-all-services.sh           # Service orchestration
-├── stop-all-services.sh            # Service shutdown
-│
-├── indexing_service/               # FastAPI indexing microservice
-│   ├── main.py                     # FastAPI app entry point
-│   ├── README.md                   # Indexing service documentation
-│   ├── models/                     # Pydantic data models
-│   ├── services/                   # Business logic
-│   │   ├── indexer.py              # CLIP embedding & Qdrant
-│   │   └── job_manager.py          # Job lifecycle management
-│   ├── api/                        # API routes
-│   └── utils/                      # Utilities & logging
-│
-├── frontend/                       # React + Vite application
-│   ├── src/
-│   │   ├── pages/
-│   │   │   ├── HomePage.jsx        # Landing with honeycomb cards
-│   │   │   ├── WorkspacePage.jsx   # Search & indexing workspace
-│   │   │   └── ProjectsPage.jsx    # Projects hub (placeholder)
-│   │   ├── components/
-│   │   │   ├── SearchPanel.jsx
-│   │   │   ├── IndexingPanel.jsx
-│   │   │   ├── HoneycombGrid.jsx   # 5-card honeycomb layout
-│   │   │   ├── HexagonCard.jsx     # Individual hex card
-│   │   │   └── icons/
-│   │   │       └── IconPlaceholders.jsx  # Configurable icons
-│   │   ├── services/
-│   │   │   └── api.js              # API client
-│   │   └── styles/
-│   │       ├── theme.css           # Dark-tech theme system
-│   │       └── global.css          # Global styles
-│   ├── package.json
-│   ├── vite.config.js
-│   └── README.md                   # Frontend documentation
-│
-├── tests/                          # Test suite
-│   └── test_all_features.py
-│
-└── qdrant_storage/                 # Vector database storage
-```
-
-For detailed component documentation, see:
-- [Indexing Service Documentation](./indexing_service/README.md)
-- [Frontend Documentation](./frontend/README.md)
-
-## 🐛 Troubleshooting
-
-**CUDA Out of Memory**
-- Set `CLIP_DEVICE=cpu` in `.env`
-
-**Translation Errors**
-- Set `TRANSLATION_FALLBACK=true`
-- Or disable: `ENABLE_ICELANDIC_TRANSLATION=false`
-
-**Port Conflicts**
-- Change `FLASK_PORT` and `INDEXING_SERVICE_PORT` in `.env`
-
-## 📄 License
-
-MIT License
+[Your License Here]
 
 ## 🙏 Acknowledgments
 
-- OpenCLIP - CLIP model implementation
-- Qdrant - Vector database
-- React & Vite - Frontend framework
-- Flask & FastAPI - Backend frameworks
+- [OpenCLIP](https://github.com/mlfoundations/open_clip) - CLIP implementation
+- [Qdrant](https://qdrant.tech/) - Vector similarity search
+- [FastAPI](https://fastapi.tiangolo.com/) - Modern API framework
+- [React](https://react.dev/) - UI framework
+
+## 📧 Support
+
+For issues and questions:
+- Open an issue on GitHub
+- Check the [documentation](docs/)
+- Review [common issues](docs/TROUBLESHOOTING.md)
+
+## 🗺️ Roadmap
+
+- [ ] Image-to-image search
+- [ ] User authentication
+- [ ] Collection management
+- [ ] Advanced filters (date, size, color)
+- [ ] Export functionality
+- [ ] Mobile application
+- [ ] Multi-language support
+- [ ] Analytics dashboard
 
 ---
 
-Built with ❤️ for preserving Icelandic visual history
+Made with ❤️ for SAGA Reykjavík
